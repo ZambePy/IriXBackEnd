@@ -20,7 +20,7 @@ model:
   path: models/gaze_cnn_best.keras
   warmup_iterations: 3
   channel_order: RGB              # confirm on Sprint 6 sanity check
-  normalization: [0, 1]           # [0,1] | [-1,1] | imagenet
+  normalization: unit             # unit ([0,1]) | signed ([-1,1]) | imagenet
   face_input_size: [224, 224]
   eye_input_size:  [112, 112]
 

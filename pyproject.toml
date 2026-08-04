@@ -83,6 +83,12 @@ python_version = "3.11"
 strict = false
 ignore_missing_imports = true
 files = ["src/irisflow"]
+plugins = ["pydantic.mypy"]
+
+[tool.pydantic-mypy]
+init_forbid_extra = false
+init_typed = true
+warn_required_dynamic_aliases = true
 
 [[tool.mypy.overrides]]
 module = [
