@@ -616,12 +616,12 @@ Legenda de esforço: `P` ≈ 2h · `M` ≈ 4h · `G` ≈ 6-8h
 - **Sanity check de orientação** (seção 7.4) documentado com resultados reais
 
 **Critérios de conclusão**
-- [ ] `MODEL_CARD.md` preenchido — **nenhum campo "a confirmar"**
-- [ ] Saída sempre em `[0,1]²`, com clamp defensivo e log de warning se o modelo extrapolar
-- [ ] Paridade Keras × ONNX: diferença máxima < 1e-3 **ou** documentado por que o ONNX não é utilizável como estimador completo (caso ele seja apenas encoder)
-- [ ] Sanity check de orientação aprovado: centro ≈ `(0.5, 0.5)`, cantos separam de forma coerente e monotônica
-- [ ] Latência de inferência ≤ 25 ms p95 em CPU de referência
-- [ ] Trocar `keras` → `onnx` no YAML funciona sem alterar nenhuma outra linha
+- [x] `MODEL_CARD.md` preenchido — **nenhum campo "a confirmar"**
+- [x] Saída sempre em `[0,1]²`, com clamp defensivo e log de warning se o modelo extrapolar
+- [x] Paridade Keras × ONNX: diferença máxima < 1e-3 **ou** documentado por que o ONNX não é utilizável como estimador completo (caso ele seja apenas encoder)
+- [x] Sanity check de orientação aprovado: centro ≈ `(0.5, 0.5)`, cantos separam de forma coerente e monotônica
+- [x] Latência de inferência ≤ 25 ms p95 em CPU de referência
+- [x] Trocar `keras` → `onnx` no YAML funciona sem alterar nenhuma outra linha
 
 > **Gate de projeto:** se o sanity check falhar, **pare**. Não prossiga para calibração — a calibração vai "esconder" o erro de orientação atrás de uma transformação aprendida, e o bug reaparecerá de forma incompreensível na Sprint 10.
 

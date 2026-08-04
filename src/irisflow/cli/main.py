@@ -10,6 +10,7 @@ from __future__ import annotations
 import typer
 
 from irisflow import __version__
+from irisflow.cli.commands.bench import bench as _bench_command
 from irisflow.cli.commands.doctor import doctor as _doctor_command
 from irisflow.cli.commands.preview import preview as _preview_command
 
@@ -25,6 +26,9 @@ app.command("doctor", help="Enumerate cameras and measure real capture rate.")(
 )
 app.command("preview", help="Overlay face + eye ROIs on the live webcam feed.")(
     _preview_command
+)
+app.command("bench", help="Inference latency / backend parity / sanity check.")(
+    _bench_command
 )
 
 
