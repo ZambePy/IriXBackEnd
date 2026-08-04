@@ -1,0 +1,59 @@
+# Byte-compiled / caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+env/
+.python-version
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Environment
+.env
+.env.local
+
+# IrisFlow-specific — never version user data or heavy artifacts
+data/logs/*
+data/recordings/*
+data/calibration/*
+!data/logs/.gitkeep
+!data/recordings/.gitkeep
+!data/calibration/.gitkeep
+
+# Model artifacts live outside the repo (or in Git LFS if configured)
+models/*.keras
+models/*.onnx
+models/*.h5
+models/*.pb
+!models/.gitkeep
+!models/MODEL_CARD.md
+
+# User calibration profiles
+configs/profiles/*
+!configs/profiles/.gitkeep
+
+# OS
+Thumbs.db
+Desktop.ini
