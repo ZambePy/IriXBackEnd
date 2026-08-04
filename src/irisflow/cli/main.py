@@ -1,8 +1,8 @@
 """IrisFlow CLI entry point.
 
-Sprint 0 wires only ``--version`` — later sprints add ``doctor`` (S3),
-``preview`` (S4), ``calibrate`` (S8), ``run`` (S10), ``bench`` / ``replay``
-(S6/S11), ``serve`` (S12).
+Sprint 0 wired only ``--version``; Sprint 3 adds ``doctor``. Later sprints
+add ``preview`` (S4), ``calibrate`` (S8), ``run`` (S10), ``bench`` /
+``replay`` (S6/S11), ``serve`` (S12).
 """
 
 from __future__ import annotations
@@ -10,12 +10,17 @@ from __future__ import annotations
 import typer
 
 from irisflow import __version__
+from irisflow.cli.commands.doctor import doctor as _doctor_command
 
 app = typer.Typer(
     name="irisflow",
     help="IrisFlow — webcam-based gaze tracking backend.",
     no_args_is_help=True,
     add_completion=False,
+)
+
+app.command("doctor", help="Enumerate cameras and measure real capture rate.")(
+    _doctor_command
 )
 
 

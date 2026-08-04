@@ -552,11 +552,11 @@ Legenda de esforço: `P` ≈ 2h · `M` ≈ 4h · `G` ≈ 6-8h
 - CLI `irisflow doctor`: reporta câmera, resolução, FPS, latência de leitura
 
 **Critérios de conclusão**
-- [ ] 60 s de captura contínua sem crescimento de memória
-- [ ] Timestamps monotônicos e sem gaps anômalos
-- [ ] Desconectar a webcam durante execução → erro tratado + tentativa de reconexão, sem travar o processo
-- [ ] `irisflow doctor` roda em máquina sem câmera e informa isso com clareza
-- [ ] Testes usam `synthetic`/`video_file` — **suite nunca depende de hardware**
+- [x] 60 s de captura contínua sem crescimento de memória
+- [x] Timestamps monotônicos e sem gaps anômalos
+- [x] Desconectar a webcam durante execução → erro tratado + tentativa de reconexão, sem travar o processo
+- [x] `irisflow doctor` roda em máquina sem câmera e informa isso com clareza
+- [x] Testes usam `synthetic`/`video_file` — **suite nunca depende de hardware**
 
 ---
 
