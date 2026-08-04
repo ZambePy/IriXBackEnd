@@ -494,9 +494,9 @@ Legenda de esforço: `P` ≈ 2h · `M` ≈ 4h · `G` ≈ 6-8h
 - `python -m irisflow --version` funcionando
 
 **Critérios de conclusão**
-- [ ] `uv sync && pytest && ruff check && mypy src/` passam em ambiente limpo
-- [ ] CI verde no primeiro push
-- [ ] `import-linter` já reprova uma violação proposital de teste
+- [x] `uv sync && pytest && ruff check && mypy src/` passam em ambiente limpo
+- [x] CI verde no primeiro push
+- [x] `import-linter` já reprova uma violação proposital de teste
 
 ---
 
@@ -513,9 +513,9 @@ Legenda de esforço: `P` ≈ 2h · `M` ≈ 4h · `G` ≈ 6-8h
 - `core/exceptions.py`: `IrisFlowError` → `CaptureError`, `DetectionError`, `InferenceError`, `CalibrationError`, `ConfigError`
 
 **Critérios de conclusão**
-- [ ] Config inválida falha na inicialização com mensagem que aponta o campo exato
-- [ ] `IRISFLOW_CAMERA__DEVICE_ID=1` sobrescreve o YAML (teste automatizado)
-- [ ] Nenhum `print()` no `src/`
+- [x] Config inválida falha na inicialização com mensagem que aponta o campo exato
+- [x] `IRISFLOW_CAMERA__DEVICE_ID=1` sobrescreve o YAML (teste automatizado)
+- [x] Nenhum `print()` no `src/`
 
 ---
 
@@ -533,10 +533,10 @@ Legenda de esforço: `P` ≈ 2h · `M` ≈ 4h · `G` ≈ 6-8h
 - `tests/fixtures/stubs.py`: implementação stub de **cada** Protocol
 
 **Critérios de conclusão**
-- [ ] `mypy --strict` limpo em `core/`
-- [ ] 100% de cobertura em `geometry.py` (inclui casos de borda: box saindo do frame, w/h zero, coordenadas negativas)
-- [ ] Cada Protocol tem um stub e um teste que verifica conformidade estrutural
-- [ ] `core/` não importa nada além de stdlib e numpy
+- [x] `mypy --strict` limpo em `core/`
+- [x] 100% de cobertura em `geometry.py` (inclui casos de borda: box saindo do frame, w/h zero, coordenadas negativas)
+- [x] Cada Protocol tem um stub e um teste que verifica conformidade estrutural
+- [x] `core/` não importa nada além de stdlib e numpy
 
 ---
 
