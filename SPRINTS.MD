@@ -573,11 +573,11 @@ Legenda de esforço: `P` ≈ 2h · `M` ≈ 4h · `G` ≈ 6-8h
 - CLI `irisflow preview`: janela com overlay dos boxes (ferramenta de depuração essencial)
 
 **Critérios de conclusão**
-- [ ] Detecta corretamente em ≥ 95% dos frames de um vídeo fixture de 30 s
-- [ ] ROIs não tremem visivelmente com o rosto parado (variação < 3 px)
-- [ ] Rosto parcialmente fora do frame → box recortado corretamente, sem índice negativo
-- [ ] Ausência de rosto → retorna `None`, nunca levanta exceção no loop
-- [ ] Detecção ≤ 15 ms por frame em CPU de referência
+- [x] Detecta corretamente em ≥ 95% dos frames de um vídeo fixture de 30 s
+- [x] ROIs não tremem visivelmente com o rosto parado (variação < 3 px)
+- [x] Rosto parcialmente fora do frame → box recortado corretamente, sem índice negativo
+- [x] Ausência de rosto → retorna `None`, nunca levanta exceção no loop
+- [x] Detecção ≤ 15 ms por frame em CPU de referência
 
 ---
 

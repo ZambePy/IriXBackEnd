@@ -14,6 +14,9 @@ detection:
   roi_margin: 0.20                # bbox expansion around raw landmarks
   smoothing_alpha: 0.4            # EMA on ROI boxes
   lost_hysteresis_frames: 5       # frames without face before LOST
+  face_model_path: models/face_landmarker.task
+  min_detection_confidence: 0.5
+  min_tracking_confidence: 0.5
 
 model:
   backend: keras                  # keras | onnx

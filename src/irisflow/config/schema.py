@@ -43,8 +43,11 @@ class CameraConfig(_Strict):
 class DetectionConfig(_Strict):
     refine_landmarks: bool = True
     roi_margin: float = Field(0.20, ge=0.0, le=1.0)
-    smoothing_alpha: float = Field(0.4, ge=0.0, le=1.0)
-    lost_hysteresis_frames: int = Field(5, ge=1)
+    smoothing_alpha: float = Field(0.4, gt=0.0, le=1.0)
+    lost_hysteresis_frames: int = Field(5, ge=0)
+    face_model_path: Path = Path("models/face_landmarker.task")
+    min_detection_confidence: float = Field(0.5, ge=0.0, le=1.0)
+    min_tracking_confidence: float = Field(0.5, ge=0.0, le=1.0)
 
 
 # ---------------------------------------------------------------------------
