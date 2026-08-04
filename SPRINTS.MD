@@ -594,11 +594,11 @@ Legenda de esforço: `P` ≈ 2h · `M` ≈ 4h · `G` ≈ 6-8h
 - `preprocessing/builder.py`: `FaceDetection + Frame → ModelInput`
 
 **Critérios de conclusão**
-- [ ] Shapes e dtypes exatos: `(224,224,3) f32`, `(112,112,3) f32`, `(112,112,3) f32`, `(12,) f32`
-- [ ] Vetor `rect` sempre em `[0,1]` — teste com rosto em todos os cantos do frame
-- [ ] Frames golden versionados: alteração no pré-processamento quebra o teste (proteção contra regressão silenciosa)
-- [ ] Pré-processamento ≤ 5 ms por frame
-- [ ] Zero alocação de arrays dentro do loop quente (buffers reaproveitados)
+- [x] Shapes e dtypes exatos: `(224,224,3) f32`, `(112,112,3) f32`, `(112,112,3) f32`, `(12,) f32`
+- [x] Vetor `rect` sempre em `[0,1]` — teste com rosto em todos os cantos do frame
+- [x] Frames golden versionados: alteração no pré-processamento quebra o teste (proteção contra regressão silenciosa)
+- [x] Pré-processamento ≤ 5 ms por frame
+- [x] Zero alocação de arrays dentro do loop quente (buffers reaproveitados)
 
 ---
 
