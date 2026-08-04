@@ -13,6 +13,7 @@ from irisflow import __version__
 from irisflow.cli.commands.bench import bench as _bench_command
 from irisflow.cli.commands.doctor import doctor as _doctor_command
 from irisflow.cli.commands.preview import preview as _preview_command
+from irisflow.cli.commands.run import run as _run_command
 
 app = typer.Typer(
     name="irisflow",
@@ -29,6 +30,9 @@ app.command("preview", help="Overlay face + eye ROIs on the live webcam feed.")(
 )
 app.command("bench", help="Inference latency / backend parity / sanity check.")(
     _bench_command
+)
+app.command("run", help="Fim-a-fim: webcam -> gaze coordinate in the terminal.")(
+    _run_command
 )
 
 

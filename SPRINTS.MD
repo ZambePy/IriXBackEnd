@@ -642,11 +642,11 @@ Legenda de esforço: `P` ≈ 2h · `M` ≈ 4h · `G` ≈ 6-8h
 - CLI `irisflow run --no-cursor`: imprime gaze e métricas ao vivo
 
 **Critérios de conclusão**
-- [ ] 5 minutos contínuos sem crash e sem vazamento de memória
-- [ ] Exceção em um estágio → frame descartado com log, pipeline continua vivo
-- [ ] `Ctrl+C` libera câmera e threads em < 1 s
-- [ ] Latência fim-a-fim reportada, p95 ≤ 80 ms
-- [ ] Teste de integração completo com `SyntheticSource` + `StubGazeEstimator`, sem hardware
+- [x] 5 minutos contínuos sem crash e sem vazamento de memória
+- [x] Exceção em um estágio → frame descartado com log, pipeline continua vivo
+- [x] `Ctrl+C` libera câmera e threads em < 1 s
+- [x] Latência fim-a-fim reportada, p95 ≤ 80 ms
+- [x] Teste de integração completo com `SyntheticSource` + `StubGazeEstimator`, sem hardware
 
 ---
 

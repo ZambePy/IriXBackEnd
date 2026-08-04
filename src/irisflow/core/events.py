@@ -23,6 +23,7 @@ __all__ = [
     "FaceLost",
     "GazeUpdated",
     "PipelineState",
+    "RawGazeReady",
     "StateChanged",
 ]
 
@@ -38,6 +39,24 @@ class PipelineState(StrEnum):
 
 
 CalibrationPhase = Literal["prompt", "collecting", "settled", "done", "aborted"]
+
+
+@dataclass(frozen=True, slots=True)
+class RawGazeReady:
+    """Raw model output right after inference — Sprint 7's first fim-a-fim signal.
+
+    Sprint 8 adds calibration, Sprint 9 adds mapping/filtering; once those
+    stages exist the pipeline publishes :class:`GazeUpdated` (integer
+    pixels + fixation flag) instead. Until then subscribers consume the
+    normalized floats directly.
+    """
+
+    frame_id: int
+    timestamp: float
+    x: float
+    y: float
+    confidence: float
+    inference_ms: float
 
 
 @dataclass(frozen=True, slots=True)
@@ -89,5 +108,12 @@ class CalibrationProgress:
     phase: CalibrationPhase
 
 
-Event = GazeUpdated | FaceLost | FaceAcquired | StateChanged | CalibrationProgress
+Event = (
+    RawGazeReady
+    | GazeUpdated
+    | FaceLost
+    | FaceAcquired
+    | StateChanged
+    | CalibrationProgress
+)
 """Type alias for anything that can appear on the bus."""
