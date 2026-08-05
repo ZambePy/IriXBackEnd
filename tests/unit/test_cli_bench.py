@@ -28,3 +28,15 @@ def test_bench_help_lists_modes() -> None:
     assert "--latency" in result.stdout
     assert "--compare-backends" in result.stdout
     assert "--sanity-check" in result.stdout
+    assert "--filters" in result.stdout
+
+
+def test_bench_filters_runs_end_to_end() -> None:
+    """`bench --filters` uses pure-python filter chains; it should not
+    require the CNN, camera, or ONNX runtime."""
+    result = runner.invoke(app, ["bench", "--filters"])
+    assert result.exit_code == 0
+    assert "jitter_rms_px" in result.stdout
+    assert "ramp_lag_ms" in result.stdout
+    assert "yaml" in result.stdout
+    assert "passthrough" in result.stdout

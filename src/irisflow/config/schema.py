@@ -91,6 +91,10 @@ class OutlierFilterConfig(_Strict):
     max_velocity_px_per_s: float = Field(6000.0, gt=0.0)
 
 
+class EmaFilterConfig(_Strict):
+    alpha: float = Field(0.4, gt=0.0, le=1.0)
+
+
 class OneEuroConfig(_Strict):
     min_cutoff: float = Field(1.0, gt=0.0)
     beta: float = Field(0.007, ge=0.0)
@@ -108,6 +112,7 @@ def _default_filter_chain() -> list[FilterName]:
 class FilterConfig(_Strict):
     chain: list[FilterName] = Field(default_factory=_default_filter_chain)
     outlier: OutlierFilterConfig = Field(default_factory=OutlierFilterConfig)
+    ema: EmaFilterConfig = Field(default_factory=EmaFilterConfig)
     one_euro: OneEuroConfig = Field(default_factory=OneEuroConfig)
     fixation: FixationConfig = Field(default_factory=FixationConfig)
 
@@ -177,6 +182,7 @@ __all__ = [
     "ControlConfig",
     "DetectionConfig",
     "DwellConfig",
+    "EmaFilterConfig",
     "FilterConfig",
     "FilterName",
     "FixationConfig",

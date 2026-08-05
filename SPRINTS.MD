@@ -689,11 +689,11 @@ Legenda de esforço: `P` ≈ 2h · `M` ≈ 4h · `G` ≈ 6-8h
 - CLI `irisflow bench --filters`: compara jitter e latência entre configurações
 
 **Critérios de conclusão**
-- [ ] Jitter em fixação ≤ 15 px RMS
-- [ ] Latência adicionada pela filtragem ≤ 20 ms durante sacadas (o One Euro não pode "borrar" movimentos rápidos)
-- [ ] Ponto sempre dentro dos limites da tela (clamp verificado)
-- [ ] Filtros são funções puras testadas com sinais sintéticos (degrau, rampa, ruído branco) e `FakeClock`
-- [ ] Trocar a cadeia de filtros no YAML não exige mudança de código
+- [x] Jitter em fixação ≤ 15 px RMS
+- [x] Latência adicionada pela filtragem ≤ 20 ms durante sacadas (o One Euro não pode "borrar" movimentos rápidos)
+- [x] Ponto sempre dentro dos limites da tela (clamp verificado)
+- [x] Filtros são funções puras testadas com sinais sintéticos (degrau, rampa, ruído branco) e `FakeClock`
+- [x] Trocar a cadeia de filtros no YAML não exige mudança de código
 
 ---
 

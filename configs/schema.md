@@ -73,6 +73,7 @@ path of the offending field.
 |---|---|---|---|
 | `chain` | `list[filter name]` | `[outlier, one_euro, fixation]` | Execution order |
 | `outlier.max_velocity_px_per_s` | `float > 0` | `6000.0` | Physically implausible speed threshold |
+| `ema.alpha` | `0 < float ≤ 1` | `0.4` | Baseline smoother (only used when `ema` in `chain`) |
 | `one_euro.min_cutoff` | `float > 0` | `1.0` | One Euro base cutoff (Hz) |
 | `one_euro.beta` | `float ≥ 0` | `0.007` | Speed-driven cutoff coefficient |
 | `one_euro.d_cutoff` | `float > 0` | `1.0` | Cutoff for derivative signal |

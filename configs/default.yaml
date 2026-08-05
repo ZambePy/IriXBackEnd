@@ -44,6 +44,8 @@ filtering:
   chain: [outlier, one_euro, fixation]
   outlier:
     max_velocity_px_per_s: 6000
+  ema:
+    alpha: 0.4
   one_euro:
     min_cutoff: 1.0
     beta: 0.007
