@@ -11,6 +11,7 @@ import typer
 
 from irisflow import __version__
 from irisflow.cli.commands.bench import bench as _bench_command
+from irisflow.cli.commands.calibrate import calibrate as _calibrate_command
 from irisflow.cli.commands.doctor import doctor as _doctor_command
 from irisflow.cli.commands.preview import preview as _preview_command
 from irisflow.cli.commands.run import run as _run_command
@@ -34,6 +35,10 @@ app.command("bench", help="Inference latency / backend parity / sanity check.")(
 app.command("run", help="Fim-a-fim: webcam -> gaze coordinate in the terminal.")(
     _run_command
 )
+app.command(
+    "calibrate",
+    help="Run a per-user calibration session and save the fitted profile.",
+)(_calibrate_command)
 
 
 def _version_callback(value: bool) -> None:

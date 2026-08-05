@@ -665,12 +665,12 @@ Legenda de esforço: `P` ≈ 2h · `M` ≈ 4h · `G` ≈ 6-8h
 - CLI `irisflow calibrate --profile <nome>`
 
 **Critérios de conclusão**
-- [ ] Sessão completa de 9 pontos em ≤ 60 s
-- [ ] Perfil salvo e recarregado com resultado numericamente idêntico
-- [ ] Modelo polinomial reduz o erro em ≥ 30% frente ao passthrough (medido em hold-out)
-- [ ] Alvos com erro alto são identificados e permitem recoleta parcial
-- [ ] Sem calibração → sistema funciona em modo degradado com warning explícito, nunca falha
-- [ ] Testes unitários com dados sintéticos de viés conhecido: a transformação recupera o viés injetado
+- [x] Sessão completa de 9 pontos em ≤ 60 s
+- [x] Perfil salvo e recarregado com resultado numericamente idêntico
+- [x] Modelo polinomial reduz o erro em ≥ 30% frente ao passthrough (medido em hold-out)
+- [x] Alvos com erro alto são identificados e permitem recoleta parcial
+- [x] Sem calibração → sistema funciona em modo degradado com warning explícito, nunca falha
+- [x] Testes unitários com dados sintéticos de viés conhecido: a transformação recupera o viés injetado
 
 ---
 
