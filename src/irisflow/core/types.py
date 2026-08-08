@@ -51,9 +51,7 @@ class Frame:
 
     def __post_init__(self) -> None:
         if self.data.ndim != 3 or self.data.shape[2] != 3:
-            raise ValueError(
-                f"Frame.data must be HxWx3, got shape {self.data.shape!r}"
-            )
+            raise ValueError(f"Frame.data must be HxWx3, got shape {self.data.shape!r}")
 
     @property
     def height(self) -> int:
@@ -150,9 +148,7 @@ class BoundingBox:
         """Return ``(x, y, w, h)`` divided by frame dimensions — used to
         assemble the ``rect`` vector fed to the CNN."""
         if frame_width <= 0 or frame_height <= 0:
-            raise ValueError(
-                f"frame dims must be positive, got {frame_width}x{frame_height}"
-            )
+            raise ValueError(f"frame dims must be positive, got {frame_width}x{frame_height}")
         return (
             self.x / frame_width,
             self.y / frame_height,
@@ -187,10 +183,10 @@ class ModelInput:
     off" — much cheaper to fail loud in preprocessing than to debug later.
     """
 
-    face: NDArray[np.float32]        # (H_face, W_face, 3)
-    left_eye: NDArray[np.float32]    # (H_eye, W_eye, 3)
-    right_eye: NDArray[np.float32]   # (H_eye, W_eye, 3)
-    rect: NDArray[np.float32]        # (12,)
+    face: NDArray[np.float32]  # (H_face, W_face, 3)
+    left_eye: NDArray[np.float32]  # (H_eye, W_eye, 3)
+    right_eye: NDArray[np.float32]  # (H_eye, W_eye, 3)
+    rect: NDArray[np.float32]  # (12,)
 
     def __post_init__(self) -> None:
         for name, expected_ndim, arr in (
@@ -199,13 +195,9 @@ class ModelInput:
             ("right_eye", 3, self.right_eye),
         ):
             if arr.ndim != expected_ndim or arr.shape[-1] != 3:
-                raise ValueError(
-                    f"ModelInput.{name} must be HxWx3, got shape {arr.shape!r}"
-                )
+                raise ValueError(f"ModelInput.{name} must be HxWx3, got shape {arr.shape!r}")
             if arr.dtype != np.float32:
-                raise ValueError(
-                    f"ModelInput.{name} must be float32, got {arr.dtype}"
-                )
+                raise ValueError(f"ModelInput.{name} must be float32, got {arr.dtype}")
         if self.rect.shape != (12,) or self.rect.dtype != np.float32:
             raise ValueError(
                 f"ModelInput.rect must be (12,) float32, got "

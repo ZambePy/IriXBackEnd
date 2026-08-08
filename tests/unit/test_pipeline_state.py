@@ -51,9 +51,7 @@ def test_transition_to_current_state_is_noop() -> None:
         (PipelineState.PAUSED, PipelineState.LOST),
     ],
 )
-def test_illegal_transitions_raise(
-    start: PipelineState, target: PipelineState
-) -> None:
+def test_illegal_transitions_raise(start: PipelineState, target: PipelineState) -> None:
     machine = PipelineStateMachine(EventBus(), initial=start)
     with pytest.raises(ValueError, match="Illegal transition"):
         machine.transition_to(target)
@@ -73,9 +71,7 @@ def test_illegal_transitions_raise(
         (PipelineState.LOST, PipelineState.IDLE),
     ],
 )
-def test_valid_transitions_succeed(
-    start: PipelineState, target: PipelineState
-) -> None:
+def test_valid_transitions_succeed(start: PipelineState, target: PipelineState) -> None:
     machine = PipelineStateMachine(EventBus(), initial=start)
     machine.transition_to(target)
     assert machine.state == target

@@ -57,9 +57,7 @@ def bbox_from_indices(
     if len(indices) == 0:
         raise ValueError("bbox_from_indices requires at least one index")
     if landmarks_px.ndim != 2 or landmarks_px.shape[1] < 2:
-        raise ValueError(
-            f"landmarks_px must be (N, >=2), got shape {landmarks_px.shape!r}"
-        )
+        raise ValueError(f"landmarks_px must be (N, >=2), got shape {landmarks_px.shape!r}")
 
     selected = landmarks_px[list(indices), :2]
     xs = selected[:, 0]

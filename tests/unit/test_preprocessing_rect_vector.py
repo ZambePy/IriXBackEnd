@@ -58,9 +58,7 @@ def test_rect_vector_slots_match_documented_layout() -> None:
     assert vec[9] == pytest.approx(60 / 400)
 
 
-@pytest.mark.parametrize(
-    "corner", ["top_left", "top_right", "bottom_left", "bottom_right"]
-)
+@pytest.mark.parametrize("corner", ["top_left", "top_right", "bottom_left", "bottom_right"])
 def test_rect_values_in_unit_range_at_every_corner(corner: str) -> None:
     face, left, right = _boxes_at(1280, 720, corner=corner)
     vec = build_rect_vector(face, left, right, frame_width=1280, frame_height=720)
@@ -71,9 +69,7 @@ def test_rect_values_in_unit_range_at_every_corner(corner: str) -> None:
 def test_rect_vector_writes_into_preallocated_out() -> None:
     face, left, right = _boxes_at(640, 480, corner="top_left")
     buf = np.zeros(RECT_DIM, dtype=np.float32)
-    result = build_rect_vector(
-        face, left, right, frame_width=640, frame_height=480, out=buf
-    )
+    result = build_rect_vector(face, left, right, frame_width=640, frame_height=480, out=buf)
     assert result is buf
     assert buf.max() > 0  # actually populated
 

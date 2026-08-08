@@ -58,9 +58,7 @@ def denormalize(nx: float, ny: float, frame_width: int, frame_height: int) -> tu
     pure lets tests distinguish "outside the screen" from "clamped to edge".
     """
     if frame_width <= 0 or frame_height <= 0:
-        raise ValueError(
-            f"frame dims must be positive, got {frame_width}x{frame_height}"
-        )
+        raise ValueError(f"frame dims must be positive, got {frame_width}x{frame_height}")
     return round(nx * frame_width), round(ny * frame_height)
 
 

@@ -56,9 +56,7 @@ def test_chain_with_only_fixation_passes_position_through() -> None:
 
 
 def test_chain_ema_only_produces_smoothed_output() -> None:
-    chain = build_filter_chain(
-        ChainConfig(chain=("ema", "fixation"), ema=EmaParams(alpha=0.5))
-    )
+    chain = build_filter_chain(ChainConfig(chain=("ema", "fixation"), ema=EmaParams(alpha=0.5)))
     chain.apply(ScreenPoint(px=0, py=0), timestamp=0.0)
     out = chain.apply(ScreenPoint(px=100, py=0), timestamp=0.033)
     assert out.px == 50

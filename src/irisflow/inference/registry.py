@@ -32,17 +32,13 @@ _BUILTIN_FACTORIES: dict[str, BackendFactory] = {}
 _CUSTOM_FACTORIES: dict[str, BackendFactory] = {}
 
 
-def _keras_factory(
-    *, path: Path, channel_order: str, normalization: str
-) -> GazeEstimator:
+def _keras_factory(*, path: Path, channel_order: str, normalization: str) -> GazeEstimator:
     from irisflow.inference.keras_backend import KerasBackend
 
     return KerasBackend(path, channel_order=channel_order, normalization=normalization)
 
 
-def _onnx_factory(
-    *, path: Path, channel_order: str, normalization: str
-) -> GazeEstimator:
+def _onnx_factory(*, path: Path, channel_order: str, normalization: str) -> GazeEstimator:
     from irisflow.inference.onnx_backend import OnnxBackend
 
     return OnnxBackend(path, channel_order=channel_order, normalization=normalization)
@@ -75,9 +71,7 @@ def build_gaze_estimator(
     factory = _CUSTOM_FACTORIES.get(backend) or _BUILTIN_FACTORIES.get(backend)
     if factory is None:
         available = sorted(set(_BUILTIN_FACTORIES) | set(_CUSTOM_FACTORIES))
-        raise ConfigError(
-            f"Unknown inference backend {backend!r}. Known: {available}"
-        )
+        raise ConfigError(f"Unknown inference backend {backend!r}. Known: {available}")
     return factory(
         path=model_path,
         channel_order=channel_order,

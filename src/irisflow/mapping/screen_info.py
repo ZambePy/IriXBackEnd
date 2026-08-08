@@ -41,8 +41,7 @@ class ScreenInfo:
     def __post_init__(self) -> None:
         if self.width_px <= 0 or self.height_px <= 0:
             raise ValueError(
-                f"ScreenInfo requires positive dims, got "
-                f"{self.width_px}x{self.height_px}"
+                f"ScreenInfo requires positive dims, got {self.width_px}x{self.height_px}"
             )
         if self.dpi is not None and self.dpi <= 0:
             raise ValueError(f"ScreenInfo.dpi must be positive, got {self.dpi}")
@@ -57,10 +56,7 @@ class ScreenInfo:
 
     def contains(self, px: int, py: int) -> bool:
         """Return True when ``(px, py)`` lies inside this screen's rectangle."""
-        return (
-            self.origin_x_px <= px < self.x2
-            and self.origin_y_px <= py < self.y2
-        )
+        return self.origin_x_px <= px < self.x2 and self.origin_y_px <= py < self.y2
 
 
 @dataclass(frozen=True, slots=True)
@@ -82,9 +78,7 @@ class MultiScreenLayout:
         seen_ids: set[int] = set()
         for s in self.screens:
             if s.screen_id in seen_ids:
-                raise ValueError(
-                    f"MultiScreenLayout: duplicate screen_id={s.screen_id}"
-                )
+                raise ValueError(f"MultiScreenLayout: duplicate screen_id={s.screen_id}")
             seen_ids.add(s.screen_id)
 
     def get(self, screen_id: int) -> ScreenInfo:

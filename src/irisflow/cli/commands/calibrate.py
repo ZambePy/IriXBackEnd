@@ -127,8 +127,10 @@ def calibrate(
     store = CalibrationStore(cfg.calibration.profiles_dir)
     saved_at = store.save(outcome.profile)
     typer.echo("")
-    typer.echo(f"[calibrate] fit mean_error_px={outcome.report.mean_error_px:.1f} "
-               f"p95={outcome.report.p95_error_px:.1f} max={outcome.report.max_error_px:.1f}")
+    typer.echo(
+        f"[calibrate] fit mean_error_px={outcome.report.mean_error_px:.1f} "
+        f"p95={outcome.report.p95_error_px:.1f} max={outcome.report.max_error_px:.1f}"
+    )
     typer.echo(f"[calibrate] hold-out mean_error_px={outcome.holdout_report.mean_error_px:.1f}")
     if outcome.accepted:
         typer.echo(f"[calibrate] accepted; profile saved to {saved_at}")

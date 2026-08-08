@@ -161,17 +161,13 @@ class PipelineRunner:
             if self._watchdog_kick is not None:
                 self._watchdog_kick()
         except Exception as exc:
-            self._log.warning(
-                "runner.tick_failed", frame_id=frame.frame_id, error=str(exc)
-            )
+            self._log.warning("runner.tick_failed", frame_id=frame.frame_id, error=str(exc))
             metrics.increment("frames_dropped")
         finally:
             clear_context()
 
     # ------------------------------------------------------------------ downstream stages
-    def _run_downstream(
-        self, *, frame_id: int, timestamp: float, raw: RawGaze
-    ) -> None:
+    def _run_downstream(self, *, frame_id: int, timestamp: float, raw: RawGaze) -> None:
         """Run calibration → mapping → filtering when those are wired."""
         components = self._components
         if components.mapper is None or components.filter_chain is None:
@@ -222,9 +218,7 @@ class PipelineRunner:
         if self._components.state.state == PipelineState.LOST:
             with contextlib.suppress(ValueError):
                 self._components.state.transition_to(PipelineState.TRACKING)
-        self._components.bus.publish(
-            FaceAcquired(frame_id=frame_id, timestamp=timestamp)
-        )
+        self._components.bus.publish(FaceAcquired(frame_id=frame_id, timestamp=timestamp))
 
     # ------------------------------------------------------------------ shutdown
     def _shutdown(self) -> None:

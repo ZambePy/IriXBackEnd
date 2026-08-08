@@ -127,9 +127,7 @@ def build_pipeline(
     real_bus = bus if bus is not None else EventBus()
     real_source = source if source is not None else _default_source(cfg, real_clock)
     real_detector = detector if detector is not None else _default_detector(cfg)
-    real_preprocessor = (
-        preprocessor if preprocessor is not None else _default_preprocessor(cfg)
-    )
+    real_preprocessor = preprocessor if preprocessor is not None else _default_preprocessor(cfg)
     if estimator is not None:
         real_estimator = estimator
     else:
@@ -148,9 +146,7 @@ def build_pipeline(
 
     real_mapper: ScreenMapper | None = mapper
     if real_mapper is None and screen is not None:
-        real_mapper = ScreenPixelMapper(
-            screen=screen, clamp_margin_px=cfg.mapping.clamp_margin_px
-        )
+        real_mapper = ScreenPixelMapper(screen=screen, clamp_margin_px=cfg.mapping.clamp_margin_px)
 
     real_filter: Filter | None = filter_chain
     if real_filter is None:
@@ -196,9 +192,7 @@ def _default_detector(cfg: AppConfig) -> FaceDetector:
         min_detection_confidence=cfg.detection.min_detection_confidence,
         min_tracking_confidence=cfg.detection.min_tracking_confidence,
     )
-    inner = MediaPipeFaceDetector(
-        mesh, roi_margin=cfg.detection.roi_margin, square_rois=True
-    )
+    inner = MediaPipeFaceDetector(mesh, roi_margin=cfg.detection.roi_margin, square_rois=True)
     return TrackedFaceDetector(
         inner,
         smoothing_alpha=cfg.detection.smoothing_alpha,
@@ -235,9 +229,7 @@ def filter_config_from_app(cfg: AppConfig) -> ChainConfig:
         chain_names = ("outlier", "one_euro", "fixation")
     return ChainConfig(
         chain=chain_names,
-        outlier=OutlierParams(
-            max_velocity_px_per_s=cfg.filtering.outlier.max_velocity_px_per_s
-        ),
+        outlier=OutlierParams(max_velocity_px_per_s=cfg.filtering.outlier.max_velocity_px_per_s),
         ema=EmaParams(alpha=cfg.filtering.ema.alpha),
         one_euro=OneEuroParams(
             min_cutoff=cfg.filtering.one_euro.min_cutoff,

@@ -82,9 +82,7 @@ def enumerate_cameras(
     """
     if max_index <= 0:
         raise ValueError(f"max_index must be > 0, got {max_index}")
-    factory: CaptureFactory = (
-        capture_factory if capture_factory is not None else cv2.VideoCapture
-    )
+    factory: CaptureFactory = capture_factory if capture_factory is not None else cv2.VideoCapture
     results: list[CameraInfo] = []
     for device_id in range(max_index):
         try:

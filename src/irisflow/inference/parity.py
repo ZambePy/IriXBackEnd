@@ -119,9 +119,7 @@ def compare_keras_embedding_vs_onnx(
     )
 
 
-def _keras_embeddings(
-    keras_model_path: Path, inputs: list[ModelInput]
-) -> NDArray[np.float32]:
+def _keras_embeddings(keras_model_path: Path, inputs: list[ModelInput]) -> NDArray[np.float32]:
     import keras
 
     model = keras.models.load_model(keras_model_path, compile=False)
@@ -133,15 +131,9 @@ def _keras_embeddings(
             "against the ONNX encoder without a shared cut point."
         ) from exc
     trunk = keras.Model(inputs=model.inputs, outputs=emb_layer.output)
-    out = np.stack(
-        [np.asarray(trunk(add_batch_dim(mi), training=False))[0] for mi in inputs]
-    )
+    out = np.stack([np.asarray(trunk(add_batch_dim(mi), training=False))[0] for mi in inputs])
     return out.astype(np.float32)
 
 
-def _onnx_embeddings(
-    onnx_model_path: Path, inputs: list[ModelInput]
-) -> NDArray[np.float32]:
-    return np.stack(
-        [embed_via_onnx(onnx_model_path, mi)[0] for mi in inputs]
-    ).astype(np.float32)
+def _onnx_embeddings(onnx_model_path: Path, inputs: list[ModelInput]) -> NDArray[np.float32]:
+    return np.stack([embed_via_onnx(onnx_model_path, mi)[0] for mi in inputs]).astype(np.float32)

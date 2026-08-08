@@ -62,9 +62,7 @@ DEFAULT_GAZE_QUEUE_SIZE = 4
 DEFAULT_EVENT_QUEUE_SIZE = 64
 
 
-def translate_event(
-    event: Event, *, screen_width: int, screen_height: int
-) -> ServerMessage | None:
+def translate_event(event: Event, *, screen_width: int, screen_height: int) -> ServerMessage | None:
     """Map a bus :class:`Event` to a WS :class:`ServerMessage`.
 
     Returns ``None`` for events without a wire counterpart (e.g. the
@@ -287,9 +285,7 @@ class SessionHub:
         for session in targets:
             self._dispatch_message(session, message)
 
-    def _dispatch_message(
-        self, session: ClientSession, message: ServerMessage
-    ) -> None:
+    def _dispatch_message(self, session: ClientSession, message: ServerMessage) -> None:
         loop = session.loop
         try:
             loop.call_soon_threadsafe(session.offer, message)

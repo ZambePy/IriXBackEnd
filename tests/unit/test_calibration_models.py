@@ -92,9 +92,7 @@ def test_affine_fit_rejects_underdetermined() -> None:
 
 
 def test_affine_rejects_nonfinite_input() -> None:
-    raw = [
-        RawGaze(x=float("nan"), y=0.1, confidence=1.0, inference_ms=1.0)
-    ] * 5
+    raw = [RawGaze(x=float("nan"), y=0.1, confidence=1.0, inference_ms=1.0)] * 5
     tgt = [(0.5, 0.5)] * 5
     with pytest.raises(CalibrationError, match="NaN or inf"):
         AffineCalibration().fit(raw, tgt)

@@ -92,17 +92,14 @@ def load_profile_dict(data: dict[str, Any]) -> CalibrationProfile:
     version = data.get("schema_version")
     if version != SCHEMA_VERSION:
         raise CalibrationError(
-            f"unsupported profile schema_version={version!r}, "
-            f"expected {SCHEMA_VERSION}"
+            f"unsupported profile schema_version={version!r}, expected {SCHEMA_VERSION}"
         )
     try:
         screen = data["screen"]
         quality = data["quality"]
         model_data = data["model"]
     except KeyError as exc:
-        raise CalibrationError(
-            f"profile missing required field: {exc.args[0]!r}"
-        ) from exc
+        raise CalibrationError(f"profile missing required field: {exc.args[0]!r}") from exc
 
     kind = model_data.get("kind")
     model: CalibrationModelImpl
@@ -219,6 +216,4 @@ def _validate_profile_id(profile_id: str) -> None:
     if not profile_id:
         raise CalibrationError("profile_id must be non-empty")
     if "/" in profile_id or "\\" in profile_id or profile_id in (".", ".."):
-        raise CalibrationError(
-            f"profile_id must not contain path separators, got {profile_id!r}"
-        )
+        raise CalibrationError(f"profile_id must not contain path separators, got {profile_id!r}")

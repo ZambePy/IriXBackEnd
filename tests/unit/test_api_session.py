@@ -67,8 +67,12 @@ async def test_events_are_preferred_over_gaze_when_both_available() -> None:
 
 def test_translate_event_covers_gaze_and_state() -> None:
     gaze = GazeUpdated(
-        frame_id=7, timestamp=0.5, px=500, py=400,
-        is_fixation=True, confidence=0.8,
+        frame_id=7,
+        timestamp=0.5,
+        px=500,
+        py=400,
+        is_fixation=True,
+        confidence=0.8,
     )
     msg = translate_event(gaze, screen_width=1000, screen_height=800)
     assert isinstance(msg, GazeMessage)
@@ -77,7 +81,8 @@ def test_translate_event_covers_gaze_and_state() -> None:
     assert msg.fixation is True
 
     state_change = StateChanged(
-        previous=PipelineState.IDLE, current=PipelineState.TRACKING,
+        previous=PipelineState.IDLE,
+        current=PipelineState.TRACKING,
         timestamp=0.0,
     )
     msg2 = translate_event(state_change, screen_width=1000, screen_height=800)
@@ -96,10 +101,16 @@ async def test_session_hub_dispatches_gaze_to_every_registered_client() -> None:
     hub.register(s1)
     hub.register(s2)
 
-    bus.publish(GazeUpdated(
-        frame_id=1, timestamp=0.0, px=100, py=200,
-        is_fixation=False, confidence=1.0,
-    ))
+    bus.publish(
+        GazeUpdated(
+            frame_id=1,
+            timestamp=0.0,
+            px=100,
+            py=200,
+            is_fixation=False,
+            confidence=1.0,
+        )
+    )
     # Give the loop a tick to process call_soon_threadsafe scheduling.
     await asyncio.sleep(0)
     for session in (s1, s2):

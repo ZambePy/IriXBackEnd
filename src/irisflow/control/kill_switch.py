@@ -32,14 +32,37 @@ def parse_hotkey(spec: str) -> str:
     keys (``f1``..``f12``).
     """
     if not spec:
-        raise IrisFlowError("kill switch hotkey must not be empty")
+        raise IrisFlowError(
+            "kill switch hotkey must not be empty — set control.safety.kill_switch "
+            "to something like 'ctrl+alt+esc'"
+        )
     parts = [p.strip().lower() for p in spec.split("+") if p.strip()]
     if not parts:
-        raise IrisFlowError(f"kill switch hotkey {spec!r} is malformed")
+        raise IrisFlowError(
+            f"kill switch hotkey {spec!r} is malformed — expected 'ctrl+alt+esc' "
+            "or similar (tokens joined with '+')"
+        )
     named = {
-        "ctrl", "alt", "shift", "cmd", "esc", "tab", "space", "enter", "return",
-        "backspace", "delete", "insert", "home", "end", "page_up", "page_down",
-        "up", "down", "left", "right",
+        "ctrl",
+        "alt",
+        "shift",
+        "cmd",
+        "esc",
+        "tab",
+        "space",
+        "enter",
+        "return",
+        "backspace",
+        "delete",
+        "insert",
+        "home",
+        "end",
+        "page_up",
+        "page_down",
+        "up",
+        "down",
+        "left",
+        "right",
     }
     rendered: list[str] = []
     for token in parts:
@@ -48,7 +71,10 @@ def parse_hotkey(spec: str) -> str:
         elif len(token) == 1:
             rendered.append(token)
         else:
-            raise IrisFlowError(f"kill switch hotkey token {token!r} is unknown")
+            raise IrisFlowError(
+                f"kill switch hotkey token {token!r} is unknown — use ctrl/alt/shift/cmd, "
+                "F1-F12, named keys (esc, tab, space, enter, ...), or a single character"
+            )
     return "+".join(rendered)
 
 
@@ -77,9 +103,7 @@ class KillSwitchListener:
         try:
             from pynput import keyboard
         except Exception as exc:  # pragma: no cover - only when pynput missing
-            raise IrisFlowError(
-                f"pynput.keyboard is required for the kill switch ({exc})"
-            ) from exc
+            raise IrisFlowError(f"pynput.keyboard is required for the kill switch ({exc})") from exc
         try:
             listener = keyboard.GlobalHotKeys({self._hotkey_spec: self._safe_trigger})
             listener.start()

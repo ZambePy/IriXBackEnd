@@ -114,6 +114,7 @@ def test_runner_survives_stage_exception_and_records_drop() -> None:
 
 def test_runner_face_lost_publishes_face_lost_and_transitions() -> None:
     """First 2 detections succeed; then None forever → LOST after first miss."""
+
     class _AbsentDetector(StubFaceDetector):
         _n: int = 0
 
@@ -134,9 +135,7 @@ def test_runner_face_lost_publishes_face_lost_and_transitions() -> None:
 
     assert len(face_acquired) == 1  # first detection triggers acquired
     assert len(face_lost) >= 1
-    lost_transitions = [
-        e for e in state_events if e.current == PipelineState.LOST
-    ]
+    lost_transitions = [e for e in state_events if e.current == PipelineState.LOST]
     assert lost_transitions, "expected a TRACKING -> LOST transition"
 
 

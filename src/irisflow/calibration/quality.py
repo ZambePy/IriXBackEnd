@@ -83,13 +83,9 @@ def evaluate_calibration(
             group.
     """
     if len(raw_samples) != len(targets):
-        raise CalibrationError(
-            f"evaluate: {len(raw_samples)} samples vs {len(targets)} targets"
-        )
+        raise CalibrationError(f"evaluate: {len(raw_samples)} samples vs {len(targets)} targets")
     if screen_width <= 0 or screen_height <= 0:
-        raise ValueError(
-            f"screen dims must be positive, got {screen_width}x{screen_height}"
-        )
+        raise ValueError(f"screen dims must be positive, got {screen_width}x{screen_height}")
     if len(raw_samples) == 0:
         raise CalibrationError("evaluate: no samples provided")
     if target_indices is not None and len(target_indices) != len(raw_samples):
@@ -99,9 +95,7 @@ def evaluate_calibration(
         )
 
     predictions = [model.transform(s) for s in raw_samples]
-    pred_arr = np.asarray(
-        [(p.x, p.y) for p in predictions], dtype=np.float64
-    )
+    pred_arr = np.asarray([(p.x, p.y) for p in predictions], dtype=np.float64)
     tgt_arr = np.asarray(targets, dtype=np.float64)
 
     delta = pred_arr - tgt_arr
@@ -168,13 +162,9 @@ def hold_out_split(
     ``(train_indices, hold_out_indices)``.
     """
     if not 0.0 < hold_out_fraction < 1.0:
-        raise ValueError(
-            f"hold_out_fraction must be in (0, 1), got {hold_out_fraction}"
-        )
+        raise ValueError(f"hold_out_fraction must be in (0, 1), got {hold_out_fraction}")
     if len(raw_samples) != len(targets) or len(raw_samples) != len(target_indices):
-        raise CalibrationError(
-            "hold_out_split: samples/targets/target_indices must be aligned"
-        )
+        raise CalibrationError("hold_out_split: samples/targets/target_indices must be aligned")
 
     rng = np.random.default_rng(seed)
     indices_arr = np.asarray(target_indices, dtype=np.int64)
@@ -193,9 +183,7 @@ def hold_out_split(
     return train, holdout
 
 
-def identify_bad_targets(
-    report: CalibrationQualityReport, *, threshold_px: float
-) -> list[int]:
+def identify_bad_targets(report: CalibrationQualityReport, *, threshold_px: float) -> list[int]:
     """Return indices of targets whose mean error exceeds ``threshold_px``.
 
     Sorted worst-first so a UI can offer them for recollection in that

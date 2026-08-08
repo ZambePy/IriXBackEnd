@@ -105,9 +105,7 @@ class MediaPipeFaceDetector:
     # ------------------------------------------------------------------ API
     def detect(self, frame: Frame) -> FaceDetection | None:
         try:
-            rgb = np.ascontiguousarray(
-                cv2.cvtColor(frame.data, cv2.COLOR_BGR2RGB), dtype=np.uint8
-            )
+            rgb = np.ascontiguousarray(cv2.cvtColor(frame.data, cv2.COLOR_BGR2RGB), dtype=np.uint8)
             landmarks_norm = self._face_mesh.detect(rgb)
         except Exception as exc:
             self._log.warning(
@@ -129,9 +127,7 @@ class MediaPipeFaceDetector:
             )
             return None
         try:
-            landmarks_px = landmarks_to_pixel_array(
-                landmarks_norm, frame.width, frame.height
-            )
+            landmarks_px = landmarks_to_pixel_array(landmarks_norm, frame.width, frame.height)
             face_bbox = bbox_from_indices(
                 landmarks_px,
                 FACE_OVAL_INDICES,

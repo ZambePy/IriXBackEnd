@@ -37,9 +37,7 @@ class ScreenMapper:
 
     def __post_init__(self) -> None:
         if self.clamp_margin_px < 0:
-            raise ValueError(
-                f"clamp_margin_px must be >= 0, got {self.clamp_margin_px}"
-            )
+            raise ValueError(f"clamp_margin_px must be >= 0, got {self.clamp_margin_px}")
         max_margin_w = self.screen.width_px // 2 - 1
         max_margin_h = self.screen.height_px // 2 - 1
         if self.clamp_margin_px > min(max_margin_w, max_margin_h):

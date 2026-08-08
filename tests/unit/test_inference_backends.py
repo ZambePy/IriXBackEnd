@@ -122,9 +122,5 @@ def test_real_parity_keras_embedding_matches_onnx_encoder() -> None:
     from irisflow.inference.parity import compare_keras_embedding_vs_onnx
 
     inputs = [_mi() for _ in range(3)]
-    report = compare_keras_embedding_vs_onnx(
-        _KERAS_MODEL, _ONNX_MODEL, inputs, tolerance=1e-3
-    )
-    assert report.passed, (
-        f"Keras-embedding vs ONNX-encoder disagree: {report}"
-    )
+    report = compare_keras_embedding_vs_onnx(_KERAS_MODEL, _ONNX_MODEL, inputs, tolerance=1e-3)
+    assert report.passed, f"Keras-embedding vs ONNX-encoder disagree: {report}"

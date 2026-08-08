@@ -105,9 +105,7 @@ def header_to_line(header: SessionHeader) -> str:
 def header_from_line(line: str) -> SessionHeader:
     data = _parse_line(line)
     if data.get("kind") != "header":
-        raise SessionRecordError(
-            f"first line must be a header, got kind={data.get('kind')!r}"
-        )
+        raise SessionRecordError(f"first line must be a header, got kind={data.get('kind')!r}")
     version = data.get("schema_version")
     if version != SCHEMA_VERSION:
         raise SessionRecordError(

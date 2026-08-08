@@ -63,9 +63,7 @@ def test_first_detection_is_returned_unchanged() -> None:
 def test_ema_smoothing_pulls_new_box_toward_previous() -> None:
     first = _make_detection(face=BoundingBox(x=10, y=10, w=50, h=50))
     second = _make_detection(face=BoundingBox(x=30, y=30, w=50, h=50))
-    tracker = TrackedFaceDetector(
-        ScriptedDetector([first, second]), smoothing_alpha=0.5
-    )
+    tracker = TrackedFaceDetector(ScriptedDetector([first, second]), smoothing_alpha=0.5)
     r1 = tracker.detect(_make_frame(0))
     r2 = tracker.detect(_make_frame(1))
     assert r1 is not None

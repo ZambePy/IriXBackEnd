@@ -171,16 +171,16 @@ def _run_sanity_check(cfg) -> None:  # type: ignore[no-untyped-def]
     typer.echo(f"Loading Keras backend ({cfg.model.path})...")
     est = _build_keras(cfg)
     positions = [
-        ("centre",       0.50, 0.50),
-        ("top-left",     0.20, 0.20),
-        ("top-right",    0.80, 0.20),
-        ("bottom-left",  0.20, 0.80),
+        ("centre", 0.50, 0.50),
+        ("top-left", 0.20, 0.20),
+        ("top-right", 0.80, 0.20),
+        ("bottom-left", 0.20, 0.80),
         ("bottom-right", 0.80, 0.80),
     ]
     typer.echo("")
     typer.echo("Sanity check — raw gaze at synthetic rect positions:")
     typer.echo(f"  {'position':<14} {'gaze_x':>8} {'gaze_y':>8}")
-    typer.echo(f"  {'-'*14} {'-'*8} {'-'*8}")
+    typer.echo(f"  {'-' * 14} {'-' * 8} {'-' * 8}")
     seen: list[tuple[str, float, float]] = []
     for name, xn, yn in positions:
         raw = est.predict(_dummy_input(x_norm=xn, y_norm=yn))  # type: ignore[attr-defined]
@@ -209,18 +209,23 @@ def _run_backend_comparison(cfg) -> None:  # type: ignore[no-untyped-def]
 
     session = _load_session(onnx_path)
     kind = onnx_output_kind(session)
-    inputs = [_dummy_input(x_norm=x, y_norm=y)
-              for x in (0.25, 0.5, 0.75) for y in (0.25, 0.5, 0.75)]
+    inputs = [
+        _dummy_input(x_norm=x, y_norm=y) for x in (0.25, 0.5, 0.75) for y in (0.25, 0.5, 0.75)
+    ]
 
     if kind == "gaze_xy":
         typer.echo("ONNX exports full gaze estimator — running head-to-head parity.")
         keras_est = build_gaze_estimator(
-            backend="keras", model_path=cfg.model.path,
-            channel_order=cfg.model.channel_order, normalization=cfg.model.normalization,
+            backend="keras",
+            model_path=cfg.model.path,
+            channel_order=cfg.model.channel_order,
+            normalization=cfg.model.normalization,
         )
         onnx_est = build_gaze_estimator(
-            backend="onnx", model_path=onnx_path,
-            channel_order=cfg.model.channel_order, normalization=cfg.model.normalization,
+            backend="onnx",
+            model_path=onnx_path,
+            channel_order=cfg.model.channel_order,
+            normalization=cfg.model.normalization,
         )
         report = compare_gaze_backends(keras_est, onnx_est, inputs)
     else:
@@ -228,9 +233,7 @@ def _run_backend_comparison(cfg) -> None:  # type: ignore[no-untyped-def]
             f"ONNX is an {kind!r} (see MODEL_CARD.md §5). Comparing Keras' "
             "embedding layer against the ONNX encoder output."
         )
-        report = compare_keras_embedding_vs_onnx(
-            cfg.model.path, onnx_path, inputs, tolerance=1e-3
-        )
+        report = compare_keras_embedding_vs_onnx(cfg.model.path, onnx_path, inputs, tolerance=1e-3)
     typer.echo("")
     typer.echo("Parity report:")
     typer.echo(f"  samples       : {report.samples}")
@@ -274,11 +277,8 @@ def _run_filters_benchmark(cfg) -> None:  # type: ignore[no-untyped-def]
     }
 
     typer.echo("")
-    typer.echo(
-        f"{'chain':<12} {'jitter_rms_px':>14} "
-        f"{'ramp_lag_ms':>13} {'step_settle_ms':>16}"
-    )
-    typer.echo(f"{'-'*12} {'-'*14} {'-'*13} {'-'*16}")
+    typer.echo(f"{'chain':<12} {'jitter_rms_px':>14} {'ramp_lag_ms':>13} {'step_settle_ms':>16}")
+    typer.echo(f"{'-' * 12} {'-' * 14} {'-' * 13} {'-' * 16}")
     for name, chain_cfg in chains.items():
         chain = build_filter_chain(chain_cfg)
         jitter = _measure_jitter_rms(chain)
@@ -286,9 +286,7 @@ def _run_filters_benchmark(cfg) -> None:  # type: ignore[no-untyped-def]
         ramp_lag = _measure_ramp_lag_ms(chain)
         chain.reset()
         settle = _measure_step_latency_ms(chain)
-        typer.echo(
-            f"{name:<12} {jitter:>14.2f} {ramp_lag:>13.2f} {settle:>16.2f}"
-        )
+        typer.echo(f"{name:<12} {jitter:>14.2f} {ramp_lag:>13.2f} {settle:>16.2f}")
 
 
 def _measure_jitter_rms(chain) -> float:  # type: ignore[no-untyped-def]

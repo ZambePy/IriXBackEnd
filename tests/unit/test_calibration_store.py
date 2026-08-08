@@ -128,8 +128,12 @@ def test_save_produces_sorted_json_for_deterministic_diffs(tmp_path: Path) -> No
 
 def test_build_profile_from_report_populates_targets() -> None:
     report = CalibrationQualityReport(
-        mean_error_px=10.0, max_error_px=30.0, p95_error_px=25.0,
-        screen_width=1920, screen_height=1080, n_samples=20,
+        mean_error_px=10.0,
+        max_error_px=30.0,
+        p95_error_px=25.0,
+        screen_width=1920,
+        screen_height=1080,
+        n_samples=20,
         targets=[TargetError(0, 0.1, 0.1, 0.12, 0.11, 5.0)],
     )
     from irisflow.core.types import RawGaze
@@ -140,7 +144,10 @@ def test_build_profile_from_report_populates_targets() -> None:
         [(0.1, 0.1)] * 3,
     )
     profile = build_profile_from_report(
-        profile_id="alice", model=model, report=report, created_at_wall_s=123.0,
+        profile_id="alice",
+        model=model,
+        report=report,
+        created_at_wall_s=123.0,
     )
     assert profile.quality_targets[0]["error_px"] == 5.0
     assert profile.mean_error_px == 10.0

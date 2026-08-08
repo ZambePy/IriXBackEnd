@@ -101,10 +101,10 @@ def test_builder_rejects_bad_eye_input_size() -> None:
 # caught by CI before it silently degrades the model.
 # ---------------------------------------------------------------------------
 _EXPECTED_HASHES = {
-    "face":      "dcbe7e253394ce0c0fabd5786d384c4ba20169c34ad29f74b503c88830cbc959",
-    "left_eye":  "59372131ca5eea55554e7c48cf1f7ccc9fcf56065510c3f0a97dbaaeb875165e",
+    "face": "dcbe7e253394ce0c0fabd5786d384c4ba20169c34ad29f74b503c88830cbc959",
+    "left_eye": "59372131ca5eea55554e7c48cf1f7ccc9fcf56065510c3f0a97dbaaeb875165e",
     "right_eye": "e784fdc6c7c8e6baa5d021b7078b40a8808b5436a894a5b35e18116657caf4e0",
-    "rect":      "2b922267a8e37d15abb695653c6f383339c08654951eaa97f86ec4b8e9311d19",
+    "rect": "2b922267a8e37d15abb695653c6f383339c08654951eaa97f86ec4b8e9311d19",
 }
 
 
@@ -135,6 +135,5 @@ def test_golden_hashes_have_not_changed() -> None:
         "rect": _hash(result.rect),
     }
     assert hashes == _EXPECTED_HASHES, (
-        "Preprocessing output changed. If intentional, update _EXPECTED_HASHES "
-        f"with:\n{hashes}"
+        f"Preprocessing output changed. If intentional, update _EXPECTED_HASHES with:\n{hashes}"
     )

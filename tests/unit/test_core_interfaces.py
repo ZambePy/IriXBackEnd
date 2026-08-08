@@ -162,4 +162,5 @@ def _raw(x: float, y: float) -> RawGaze:
 
 def _calibrated(x: float, y: float):
     from irisflow.core.types import CalibratedGaze
+
     return CalibratedGaze(x=x, y=y, profile_id="p")

@@ -143,9 +143,7 @@ class CalibrationSession:
                 f"screen must have positive dims, got {self.screen_width}x{self.screen_height}"
             )
         if self.max_residual_px <= 0:
-            raise CalibrationError(
-                f"max_residual_px must be > 0, got {self.max_residual_px}"
-            )
+            raise CalibrationError(f"max_residual_px must be > 0, got {self.max_residual_px}")
         self._targets = generate_targets(self.point_count, margin=self.margin)
 
     # ------------------------------------------------------------------ props
@@ -284,9 +282,7 @@ class CalibrationSession:
     def finalize(self) -> CalibrationOutcome:
         """Fit the calibration model, evaluate quality, package the profile."""
         if not self.is_collection_complete:
-            raise CalibrationError(
-                "finalize called before every target completed collection"
-            )
+            raise CalibrationError("finalize called before every target completed collection")
         self._phase = SessionPhase.FITTING
         batches = [self._collectors[t.index].batch() for t in self._targets]
         samples, targets, indices = flatten_batches(batches)
@@ -357,9 +353,7 @@ class CalibrationSession:
 
     def _require_target(self, index: int) -> CalibrationTarget:
         if not 0 <= index < len(self._targets):
-            raise CalibrationError(
-                f"target index {index} out of range [0, {len(self._targets)})"
-            )
+            raise CalibrationError(f"target index {index} out of range [0, {len(self._targets)})")
         return self._targets[index]
 
     def _emit(self, target: CalibrationTarget, *, phase: CalibrationPhase) -> None:

@@ -100,9 +100,7 @@ def build_stubbed_app_state(
         state=PipelineStateMachine(bus, clock=clock),
         metrics=MetricsRecorder(_clock=clock),
         clock=clock,
-        mapper=IdentityScreenMapper(
-            screen_width=screen_width, screen_height=screen_height
-        ),
+        mapper=IdentityScreenMapper(screen_width=screen_width, screen_height=screen_height),
         filter_chain=chain,
         cursor=cursor,
     )
@@ -114,9 +112,7 @@ def build_stubbed_app_state(
             rest_zone=RestZone(0, 0, 0, 0),
             clock=clock,
         ),
-        dwell=DwellClicker(
-            DwellParams(radius_px=200, duration_ms=100, refractory_ms=50)
-        ),
+        dwell=DwellClicker(DwellParams(radius_px=200, duration_ms=100, refractory_ms=50)),
         cursor_enabled_on_start=False,
         clock=clock,
     )

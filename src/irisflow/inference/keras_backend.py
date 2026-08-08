@@ -66,9 +66,7 @@ class KerasBackend:
         try:
             model = keras.models.load_model(model_path, compile=False)
         except Exception as exc:
-            raise InferenceError(
-                f"Failed to load Keras model {model_path!r}: {exc}"
-            ) from exc
+            raise InferenceError(f"Failed to load Keras model {model_path!r}: {exc}") from exc
 
         self._model = model
         input_names = tuple(inp.name for inp in model.inputs)
@@ -104,9 +102,7 @@ class KerasBackend:
         elapsed_ms = (time.perf_counter() - start) * 1000.0
         arr = _to_numpy(out)
         if arr.shape != (1, 2):
-            raise InferenceError(
-                f"Keras model returned shape {arr.shape!r}, expected (1, 2)."
-            )
+            raise InferenceError(f"Keras model returned shape {arr.shape!r}, expected (1, 2).")
         return clamp_gaze(
             float(arr[0, 0]),
             float(arr[0, 1]),

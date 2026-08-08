@@ -72,16 +72,13 @@ def build_rect_vector(
             the wrong shape/dtype.
     """
     if frame_width <= 0 or frame_height <= 0:
-        raise ValueError(
-            f"frame dims must be positive, got {frame_width}x{frame_height}"
-        )
+        raise ValueError(f"frame dims must be positive, got {frame_width}x{frame_height}")
     if out is None:
         buf = np.empty(RECT_DIM, dtype=np.float32)
     else:
         if out.shape != (RECT_DIM,) or out.dtype != np.float32:
             raise ValueError(
-                f"out must be ({RECT_DIM},) float32, got "
-                f"shape={out.shape!r} dtype={out.dtype}"
+                f"out must be ({RECT_DIM},) float32, got shape={out.shape!r} dtype={out.dtype}"
             )
         buf = out
 

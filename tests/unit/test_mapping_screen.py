@@ -50,9 +50,7 @@ def test_out_of_range_gaze_is_clamped() -> None:
 
 def test_multi_screen_origin_offset_applied() -> None:
     mapper = ScreenMapper(
-        screen=ScreenInfo(
-            width_px=1920, height_px=1080, origin_x_px=1920, screen_id=1
-        )
+        screen=ScreenInfo(width_px=1920, height_px=1080, origin_x_px=1920, screen_id=1)
     )
     out = mapper.to_screen(CalibratedGaze(x=0.5, y=0.5, profile_id="p"))
     assert out.px == 1920 + 960

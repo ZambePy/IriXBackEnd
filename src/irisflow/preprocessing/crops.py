@@ -40,9 +40,7 @@ def crop_with_replicate_pad(
             intersection with the frame is empty (fully outside).
     """
     if image.ndim != 3 or image.shape[2] != 3:
-        raise ValueError(
-            f"crop_with_replicate_pad expects (H, W, 3), got {image.shape!r}"
-        )
+        raise ValueError(f"crop_with_replicate_pad expects (H, W, 3), got {image.shape!r}")
     if bbox.w <= 0 or bbox.h <= 0:
         raise ValueError(f"bbox has non-positive size: w={bbox.w} h={bbox.h}")
 
@@ -53,9 +51,7 @@ def crop_with_replicate_pad(
     valid_y2 = min(frame_h, bbox.y2)
 
     if valid_x2 <= valid_x1 or valid_y2 <= valid_y1:
-        raise ValueError(
-            f"bbox {bbox!r} has no intersection with frame {frame_w}x{frame_h}"
-        )
+        raise ValueError(f"bbox {bbox!r} has no intersection with frame {frame_w}x{frame_h}")
 
     pad_left = valid_x1 - bbox.x
     pad_top = valid_y1 - bbox.y

@@ -122,8 +122,13 @@ def test_session_publishes_progress_events() -> None:
 def test_session_retry_targets_clears_previous_batch() -> None:
     clock = FakeClock()
     session = CalibrationSession(
-        profile_id="dan", screen_width=1000, screen_height=800,
-        point_count=5, samples_per_point=3, stabilization_ms=0, clock=clock,
+        profile_id="dan",
+        screen_width=1000,
+        screen_height=800,
+        point_count=5,
+        samples_per_point=3,
+        stabilization_ms=0,
+        clock=clock,
     )
     session.start()
     _feed_target_to_completion(session, 0, clock=clock)
@@ -140,8 +145,13 @@ def test_session_retry_targets_clears_previous_batch() -> None:
 def test_session_finalize_before_complete_raises() -> None:
     clock = FakeClock()
     session = CalibrationSession(
-        profile_id="eve", screen_width=1000, screen_height=800,
-        point_count=5, samples_per_point=3, stabilization_ms=0, clock=clock,
+        profile_id="eve",
+        screen_width=1000,
+        screen_height=800,
+        point_count=5,
+        samples_per_point=3,
+        stabilization_ms=0,
+        clock=clock,
     )
     session.start()
     _feed_target_to_completion(session, 0, clock=clock)
@@ -153,9 +163,12 @@ def test_session_reports_bad_targets_when_error_above_threshold() -> None:
     clock = FakeClock()
     session = CalibrationSession(
         profile_id="frank",
-        screen_width=1920, screen_height=1080,
-        point_count=9, samples_per_point=8,
-        stabilization_ms=0, clock=clock,
+        screen_width=1920,
+        screen_height=1080,
+        point_count=9,
+        samples_per_point=8,
+        stabilization_ms=0,
+        clock=clock,
         max_residual_px=1.0,  # extremely strict threshold
     )
     session.start()
@@ -170,8 +183,13 @@ def test_session_reports_bad_targets_when_error_above_threshold() -> None:
 def test_session_force_complete_active_allows_short_target() -> None:
     clock = FakeClock()
     session = CalibrationSession(
-        profile_id="gina", screen_width=1000, screen_height=800,
-        point_count=5, samples_per_point=100, stabilization_ms=0, clock=clock,
+        profile_id="gina",
+        screen_width=1000,
+        screen_height=800,
+        point_count=5,
+        samples_per_point=100,
+        stabilization_ms=0,
+        clock=clock,
     )
     session.start()
     target = session.targets[0]
@@ -193,8 +211,12 @@ def test_session_aborted_targets_still_count_as_resolved() -> None:
     clock = FakeClock()
     session = CalibrationSession(
         profile_id="hana",
-        screen_width=1000, screen_height=800,
-        point_count=5, samples_per_point=3, stabilization_ms=0, clock=clock,
+        screen_width=1000,
+        screen_height=800,
+        point_count=5,
+        samples_per_point=3,
+        stabilization_ms=0,
+        clock=clock,
     )
     session.start()
     _feed_target_to_completion(session, 0, clock=clock)
@@ -231,7 +253,10 @@ def test_session_rejects_invalid_screen() -> None:
     clock = FakeClock()
     with pytest.raises(CalibrationError, match="positive dims"):
         CalibrationSession(
-            profile_id="x", screen_width=0, screen_height=800, clock=clock,
+            profile_id="x",
+            screen_width=0,
+            screen_height=800,
+            clock=clock,
         )
 
 
@@ -239,14 +264,20 @@ def test_session_rejects_empty_profile_id() -> None:
     clock = FakeClock()
     with pytest.raises(CalibrationError, match="profile_id"):
         CalibrationSession(
-            profile_id="", screen_width=1000, screen_height=800, clock=clock,
+            profile_id="",
+            screen_width=1000,
+            screen_height=800,
+            clock=clock,
         )
 
 
 def test_current_target_state_none_when_no_target_active() -> None:
     clock = FakeClock()
     session = CalibrationSession(
-        profile_id="init", screen_width=1000, screen_height=800, clock=clock,
+        profile_id="init",
+        screen_width=1000,
+        screen_height=800,
+        clock=clock,
     )
     assert session.active_target is None
     assert session.current_target_collected == 0
@@ -260,8 +291,12 @@ def test_session_supports_persistence_round_trip(tmp_path) -> None:  # type: ign
     clock = FakeClock()
     session = CalibrationSession(
         profile_id="round",
-        screen_width=1600, screen_height=900,
-        point_count=9, samples_per_point=10, stabilization_ms=0, clock=clock,
+        screen_width=1600,
+        screen_height=900,
+        point_count=9,
+        samples_per_point=10,
+        stabilization_ms=0,
+        clock=clock,
     )
     session.start()
     for idx in range(9):

@@ -141,17 +141,12 @@ class SessionReplayer:
             self._maybe_emit_safety_pause(event.timestamp, result)
             return
         if isinstance(event, FaceAcquired):
-            was_paused_face = (
-                self._safety.is_paused
-                and self._safety.pause_reason == "face_lost"
-            )
+            was_paused_face = self._safety.is_paused and self._safety.pause_reason == "face_lost"
             self._safety.on_face_acquired()
             self._face_present = True
             if was_paused_face and self._cursor_enabled:
                 result.events.append(SafetyResumed(timestamp=event.timestamp))
-                result.safety_resumed.append(
-                    SafetyResumed(timestamp=event.timestamp)
-                )
+                result.safety_resumed.append(SafetyResumed(timestamp=event.timestamp))
             return
         if isinstance(event, RawGazeReady):
             self._on_raw_gaze(event, result)

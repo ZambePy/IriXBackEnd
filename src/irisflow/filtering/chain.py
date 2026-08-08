@@ -171,6 +171,5 @@ def _validate_chain(chain: Sequence[FilterName]) -> None:
         seen.add(name)
         if name == "fixation" and i != len(chain) - 1:
             raise ValueError(
-                "'fixation' must be the last stage in the chain, "
-                f"got position {i}/{len(chain) - 1}"
+                f"'fixation' must be the last stage in the chain, got position {i}/{len(chain) - 1}"
             )

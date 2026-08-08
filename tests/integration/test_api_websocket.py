@@ -67,8 +67,12 @@ def test_ws_streams_gaze_when_bus_publishes(stub_config: AppConfig) -> None:
     with TestClient(app) as client, client.websocket_connect("/ws/gaze") as ws:
         bundle.bus.publish(
             GazeUpdated(
-                frame_id=_MARKER_FRAME_A, timestamp=0.5, px=500, py=400,
-                is_fixation=True, confidence=0.9,
+                frame_id=_MARKER_FRAME_A,
+                timestamp=0.5,
+                px=500,
+                py=400,
+                is_fixation=True,
+                confidence=0.9,
             )
         )
         msg = _read_until(ws, "gaze", match_frame_id=_MARKER_FRAME_A)
@@ -97,12 +101,19 @@ def test_ws_state_change_reaches_client(stub_config: AppConfig) -> None:
 def test_ws_multiple_clients_receive_same_event(stub_config: AppConfig) -> None:
     bundle = build_stubbed_app_state(config=stub_config)
     app = create_app(state=bundle.state)
-    with TestClient(app) as client, client.websocket_connect("/ws/gaze") as ws1, \
-             client.websocket_connect("/ws/gaze") as ws2:
+    with (
+        TestClient(app) as client,
+        client.websocket_connect("/ws/gaze") as ws1,
+        client.websocket_connect("/ws/gaze") as ws2,
+    ):
         bundle.bus.publish(
             GazeUpdated(
-                frame_id=_MARKER_FRAME_B, timestamp=0.5, px=100, py=200,
-                is_fixation=False, confidence=1.0,
+                frame_id=_MARKER_FRAME_B,
+                timestamp=0.5,
+                px=100,
+                py=200,
+                is_fixation=False,
+                confidence=1.0,
             )
         )
         m1 = _read_until(ws1, "gaze", match_frame_id=_MARKER_FRAME_B)
@@ -157,8 +168,12 @@ def test_ws_client_disconnect_does_not_kill_pipeline(stub_config: AppConfig) -> 
         with client.websocket_connect("/ws/gaze") as ws:
             bundle.bus.publish(
                 GazeUpdated(
-                    frame_id=_MARKER_FRAME_C, timestamp=1.0, px=1, py=2,
-                    is_fixation=False, confidence=1.0,
+                    frame_id=_MARKER_FRAME_C,
+                    timestamp=1.0,
+                    px=1,
+                    py=2,
+                    is_fixation=False,
+                    confidence=1.0,
                 )
             )
             msg = _read_until(ws, "gaze", match_frame_id=_MARKER_FRAME_C)
@@ -175,8 +190,12 @@ def test_ws_slow_client_drops_gaze_not_pipeline(stub_config: AppConfig) -> None:
         for i in range(50):
             bundle.bus.publish(
                 GazeUpdated(
-                    frame_id=i, timestamp=float(i), px=i, py=i,
-                    is_fixation=False, confidence=1.0,
+                    frame_id=i,
+                    timestamp=float(i),
+                    px=i,
+                    py=i,
+                    is_fixation=False,
+                    confidence=1.0,
                 )
             )
         # Drain a handful; the earliest frame_id we see should be much later

@@ -85,9 +85,7 @@ class SyntheticFrameSource:
 class StubFaceDetector:
     """Returns a fixed ``FaceDetection``, or ``None`` on flagged frame ids."""
 
-    face_bbox: BoundingBox = field(
-        default_factory=lambda: BoundingBox(x=100, y=100, w=200, h=200)
-    )
+    face_bbox: BoundingBox = field(default_factory=lambda: BoundingBox(x=100, y=100, w=200, h=200))
     left_eye_bbox: BoundingBox = field(
         default_factory=lambda: BoundingBox(x=120, y=150, w=40, h=25)
     )
@@ -138,9 +136,7 @@ class StubGazeEstimator:
     """Emits a scripted trajectory. Never loads a real model — this is the
     dublê referenced by SPRINTS.md §7 that must never leak into ``src/``."""
 
-    trajectory: Sequence[tuple[float, float]] = field(
-        default_factory=lambda: [(0.5, 0.5)]
-    )
+    trajectory: Sequence[tuple[float, float]] = field(default_factory=lambda: [(0.5, 0.5)])
     inference_ms: float = 5.0
     _cursor: int = 0
 
@@ -226,14 +222,10 @@ class IdentityFilter:
 
     def apply(self, point: ScreenPoint, timestamp: float) -> SmoothedPoint:
         is_fixation = (
-            self._last is not None
-            and self._last.px == point.px
-            and self._last.py == point.py
+            self._last is not None and self._last.px == point.px and self._last.py == point.py
         )
         self._last = point
-        return SmoothedPoint(
-            px=point.px, py=point.py, is_fixation=is_fixation, velocity=0.0
-        )
+        return SmoothedPoint(px=point.px, py=point.py, is_fixation=is_fixation, velocity=0.0)
 
     def reset(self) -> None:
         self._last = None

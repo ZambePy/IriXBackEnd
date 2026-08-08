@@ -34,10 +34,10 @@ __all__ = [
 class CollectorState(StrEnum):
     """Where the collector is in its per-target lifecycle."""
 
-    WAITING = "waiting"       # target just shown, waiting for stabilization
+    WAITING = "waiting"  # target just shown, waiting for stabilization
     COLLECTING = "collecting"  # actively taking samples
-    DONE = "done"             # enough samples collected
-    ABORTED = "aborted"       # caller decided to abandon this target
+    DONE = "done"  # enough samples collected
+    ABORTED = "aborted"  # caller decided to abandon this target
 
 
 @dataclass(frozen=True, slots=True)
@@ -89,17 +89,11 @@ class TargetCollector:
 
     def __post_init__(self) -> None:
         if self.samples_per_point < 1:
-            raise CalibrationError(
-                f"samples_per_point must be >= 1, got {self.samples_per_point}"
-            )
+            raise CalibrationError(f"samples_per_point must be >= 1, got {self.samples_per_point}")
         if self.stabilization_ms < 0:
-            raise CalibrationError(
-                f"stabilization_ms must be >= 0, got {self.stabilization_ms}"
-            )
+            raise CalibrationError(f"stabilization_ms must be >= 0, got {self.stabilization_ms}")
         if self.stability_window < 1:
-            raise CalibrationError(
-                f"stability_window must be >= 1, got {self.stability_window}"
-            )
+            raise CalibrationError(f"stability_window must be >= 1, got {self.stability_window}")
         if self.stability_threshold <= 0:
             raise CalibrationError(
                 f"stability_threshold must be > 0, got {self.stability_threshold}"
@@ -198,9 +192,7 @@ class TargetCollector:
         ys = [y for _, y in self._recent]
         mean_x = sum(xs) / len(xs)
         mean_y = sum(ys) / len(ys)
-        mad = sum(abs(x - mean_x) + abs(y - mean_y) for x, y in self._recent) / len(
-            self._recent
-        )
+        mad = sum(abs(x - mean_x) + abs(y - mean_y) for x, y in self._recent) / len(self._recent)
         return mad <= self.stability_threshold
 
 

@@ -50,9 +50,7 @@ class DwellParams:
         if self.duration_ms <= 0:
             raise ValueError(f"duration_ms must be > 0, got {self.duration_ms}")
         if self.refractory_ms < 0:
-            raise ValueError(
-                f"refractory_ms must be >= 0, got {self.refractory_ms}"
-            )
+            raise ValueError(f"refractory_ms must be >= 0, got {self.refractory_ms}")
 
 
 @dataclass(frozen=True, slots=True)
@@ -116,8 +114,10 @@ class DwellClicker:
         # Refractory window: clear when the pointer has moved out of the
         # last click's radius. Otherwise stay refractory.
         if self._last_click_at is not None:
-            if self._anchor_x is None or self._anchor_y is None or self._is_outside(
-                px, py, self._anchor_x, self._anchor_y
+            if (
+                self._anchor_x is None
+                or self._anchor_y is None
+                or self._is_outside(px, py, self._anchor_x, self._anchor_y)
             ):
                 # Enter refractory-outside: reset cluster but keep the
                 # "clicked" marker until the ``refractory_ms`` timer expires.

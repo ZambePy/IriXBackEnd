@@ -75,9 +75,7 @@ def _synthetic_landmarks(width: int = 100, height: int = 100) -> NDArray[np.floa
 
 
 def _make_frame(width: int = 100, height: int = 100) -> Frame:
-    return Frame(
-        data=np.zeros((height, width, 3), dtype=np.uint8), frame_id=0, timestamp=0.0
-    )
+    return Frame(data=np.zeros((height, width, 3), dtype=np.uint8), frame_id=0, timestamp=0.0)
 
 
 # ---------------------------------------------------------------------------
@@ -124,8 +122,11 @@ def test_detector_boxes_are_squared_when_configured() -> None:
     for box in (result.face_bbox, result.left_eye_bbox, result.right_eye_bbox):
         # to_square + clip may crop one side at the frame edge, but at
         # construction time before clip the boxes were square.
-        assert abs(box.w - box.h) <= 1 or box.x == 0 or box.y == 0 or (
-            box.x + box.w >= 100 or box.y + box.h >= 100
+        assert (
+            abs(box.w - box.h) <= 1
+            or box.x == 0
+            or box.y == 0
+            or (box.x + box.w >= 100 or box.y + box.h >= 100)
         )
 
 

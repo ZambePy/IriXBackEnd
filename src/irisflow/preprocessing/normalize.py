@@ -39,14 +39,10 @@ NormalizationScheme = Literal["unit", "signed", "imagenet"]
 ChannelOrder = Literal["RGB", "BGR"]
 
 
-IMAGENET_MEAN: NDArray[np.float32] = np.array(
-    [0.485, 0.456, 0.406], dtype=np.float32
-)
+IMAGENET_MEAN: NDArray[np.float32] = np.array([0.485, 0.456, 0.406], dtype=np.float32)
 """Per-channel mean assumed by ImageNet-pretrained models (in RGB order)."""
 
-IMAGENET_STD: NDArray[np.float32] = np.array(
-    [0.229, 0.224, 0.225], dtype=np.float32
-)
+IMAGENET_STD: NDArray[np.float32] = np.array([0.229, 0.224, 0.225], dtype=np.float32)
 """Per-channel std assumed by ImageNet-pretrained models (in RGB order)."""
 
 
@@ -75,9 +71,7 @@ def normalize_into(
         ValueError: Shape/dtype mismatch, or an unknown ``scheme``.
     """
     if src.ndim != 3 or src.shape[2] != 3 or src.dtype != np.uint8:
-        raise ValueError(
-            f"src must be (H, W, 3) uint8, got shape={src.shape!r} dtype={src.dtype}"
-        )
+        raise ValueError(f"src must be (H, W, 3) uint8, got shape={src.shape!r} dtype={src.dtype}")
     if dst.shape != src.shape or dst.dtype != np.float32:
         raise ValueError(
             f"dst must match src shape as float32, got dst shape={dst.shape!r} "

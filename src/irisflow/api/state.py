@@ -175,9 +175,7 @@ class AppState:
         """Bring up the pipeline in a background thread."""
         self.hub.start()
         self.control_sink.start()
-        thread = threading.Thread(
-            target=self._run_pipeline, name="irisflow-pipeline", daemon=True
-        )
+        thread = threading.Thread(target=self._run_pipeline, name="irisflow-pipeline", daemon=True)
         self.runner_thread = thread
         thread.start()
 

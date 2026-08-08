@@ -65,14 +65,8 @@ def _onnx_summary(model_path: Path) -> dict[str, Any]:
     import onnxruntime as ort
 
     sess = ort.InferenceSession(str(model_path), providers=["CPUExecutionProvider"])
-    inputs = [
-        {"name": i.name, "shape": list(i.shape), "type": i.type}
-        for i in sess.get_inputs()
-    ]
-    outputs = [
-        {"name": o.name, "shape": list(o.shape), "type": o.type}
-        for o in sess.get_outputs()
-    ]
+    inputs = [{"name": i.name, "shape": list(i.shape), "type": i.type} for i in sess.get_inputs()]
+    outputs = [{"name": o.name, "shape": list(o.shape), "type": o.type} for o in sess.get_outputs()]
     return {"inputs": inputs, "outputs": outputs}
 
 
@@ -99,10 +93,7 @@ def _render_card(
     onnx_kind = _classify_onnx(onnx_info)
 
     def _tensor_row(t: dict[str, Any]) -> str:
-        return (
-            f"| `{t['name']}` | `{tuple(t['shape'])}` | "
-            f"`{t.get('dtype', t.get('type', '?'))}` |"
-        )
+        return f"| `{t['name']}` | `{tuple(t['shape'])}` | `{t.get('dtype', t.get('type', '?'))}` |"
 
     keras_input_rows = "\n".join(_tensor_row(t) for t in keras_info["inputs"])
     keras_output_rows = "\n".join(_tensor_row(t) for t in keras_info["outputs"])

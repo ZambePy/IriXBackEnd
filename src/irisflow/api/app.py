@@ -27,11 +27,11 @@ from irisflow.api.state import AppState
 from irisflow.api.ws import router as ws_router
 from irisflow.config.loader import load_config
 from irisflow.config.schema import AppConfig
+from irisflow.control.dwell import DwellClicker, DwellParams
 from irisflow.control.noop import NoOpCursor
+from irisflow.control.safety import RestZone, SafetyGate
 from irisflow.core.interfaces import CursorController
 from irisflow.mapping.screen_info import ScreenInfo
-from irisflow.control.dwell import DwellClicker, DwellParams
-from irisflow.control.safety import RestZone, SafetyGate
 from irisflow.pipeline.control_sink import ControlSink
 from irisflow.pipeline.orchestrator import PipelineComponents, build_pipeline
 from irisflow.pipeline.runner import PipelineRunner
@@ -110,9 +110,7 @@ def build_app_state_from_config(cfg: AppConfig) -> AppState:
         clock=components.clock,
     )
     runner = PipelineRunner(components, watchdog_kick=control_sink.watchdog_kick)
-    hub = SessionHub(
-        components.bus, screen_width=screen.width_px, screen_height=screen.height_px
-    )
+    hub = SessionHub(components.bus, screen_width=screen.width_px, screen_height=screen.height_px)
     return AppState(
         config=cfg,
         components=components,

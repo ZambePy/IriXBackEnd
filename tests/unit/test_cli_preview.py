@@ -32,8 +32,7 @@ def test_preview_exits_gracefully_when_model_missing(tmp_path: Path) -> None:
     cfg = tmp_path / "preview.yaml"
     missing_model = tmp_path / "missing.task"
     cfg.write_text(
-        f"detection:\n"
-        f"  face_model_path: {missing_model.as_posix()}\n",
+        f"detection:\n  face_model_path: {missing_model.as_posix()}\n",
         encoding="utf-8",
     )
     result = runner.invoke(app, ["preview", "--config", str(cfg)])

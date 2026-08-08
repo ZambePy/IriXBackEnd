@@ -131,9 +131,7 @@ def _build_replayer(
         except Exception:
             calibration_model = None
 
-    screen = ScreenInfo(
-        width_px=header.screen_width_px, height_px=header.screen_height_px
-    )
+    screen = ScreenInfo(width_px=header.screen_width_px, height_px=header.screen_height_px)
     mapper = ScreenPixelMapper(screen=screen, clamp_margin_px=cfg.mapping.clamp_margin_px)
     filter_chain = build_filter_chain(filter_config_from_app(cfg))
     safety = SafetyGate(
@@ -167,10 +165,7 @@ def _diff_replay(recorded: list[Event], result: ReplayResult) -> str | None:
     """Return ``None`` when replay matches, otherwise a short message."""
     recorded_gaze = [e for e in recorded if isinstance(e, GazeUpdated)]
     if len(recorded_gaze) != len(result.gaze_updates):
-        return (
-            f"gaze count {len(recorded_gaze)} recorded vs "
-            f"{len(result.gaze_updates)} replayed"
-        )
+        return f"gaze count {len(recorded_gaze)} recorded vs {len(result.gaze_updates)} replayed"
     for i, (a, b) in enumerate(zip(recorded_gaze, result.gaze_updates, strict=False)):
         if (a.frame_id, a.px, a.py, a.is_fixation) != (
             b.frame_id,
@@ -182,10 +177,7 @@ def _diff_replay(recorded: list[Event], result: ReplayResult) -> str | None:
 
     recorded_clicks = [e for e in recorded if isinstance(e, DwellClick)]
     if len(recorded_clicks) != len(result.dwell_clicks):
-        return (
-            f"click count {len(recorded_clicks)} recorded vs "
-            f"{len(result.dwell_clicks)} replayed"
-        )
+        return f"click count {len(recorded_clicks)} recorded vs {len(result.dwell_clicks)} replayed"
     recorded_progress = [e for e in recorded if isinstance(e, DwellProgress)]
     if len(recorded_progress) != len(result.dwell_progress):
         return (

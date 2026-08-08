@@ -51,9 +51,7 @@ def test_state_changed_records_transition() -> None:
 
 
 def test_calibration_progress_carries_phase_and_target() -> None:
-    evt = CalibrationProgress(
-        index=3, total=9, target_x=0.5, target_y=0.1, phase="collecting"
-    )
+    evt = CalibrationProgress(index=3, total=9, target_x=0.5, target_y=0.1, phase="collecting")
     assert evt.phase == "collecting"
 
 

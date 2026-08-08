@@ -46,18 +46,13 @@ def _sample_header() -> SessionHeader:
 
 def _all_event_kinds() -> list[Event]:
     return [
-        RawGazeReady(frame_id=1, timestamp=0.1, x=0.4, y=0.6, confidence=0.9,
-                     inference_ms=4.2),
-        GazeUpdated(frame_id=1, timestamp=0.1, px=770, py=650, is_fixation=True,
-                    confidence=0.9),
+        RawGazeReady(frame_id=1, timestamp=0.1, x=0.4, y=0.6, confidence=0.9, inference_ms=4.2),
+        GazeUpdated(frame_id=1, timestamp=0.1, px=770, py=650, is_fixation=True, confidence=0.9),
         FaceLost(frame_id=2, timestamp=0.2, duration_ms=17.0),
         FaceAcquired(frame_id=3, timestamp=0.3),
-        StateChanged(previous=PipelineState.TRACKING, current=PipelineState.LOST,
-                     timestamp=0.4),
-        CalibrationProgress(index=3, total=9, target_x=0.5, target_y=0.5,
-                            phase="collecting"),
-        DwellProgress(frame_id=4, timestamp=0.5, px=100, py=200, progress=0.7,
-                      radius_px=40),
+        StateChanged(previous=PipelineState.TRACKING, current=PipelineState.LOST, timestamp=0.4),
+        CalibrationProgress(index=3, total=9, target_x=0.5, target_y=0.5, phase="collecting"),
+        DwellProgress(frame_id=4, timestamp=0.5, px=100, py=200, progress=0.7, radius_px=40),
         DwellClick(frame_id=5, timestamp=0.6, px=100, py=200, button="left"),
         SafetyPaused(timestamp=0.7, reason="kill_switch"),
         SafetyResumed(timestamp=0.8),

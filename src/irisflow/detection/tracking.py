@@ -54,9 +54,7 @@ class TrackedFaceDetector:
         lost_hysteresis: int = 5,
     ) -> None:
         if not (0.0 < smoothing_alpha <= 1.0):
-            raise ValueError(
-                f"smoothing_alpha must be in (0, 1], got {smoothing_alpha}"
-            )
+            raise ValueError(f"smoothing_alpha must be in (0, 1], got {smoothing_alpha}")
         if lost_hysteresis < 0:
             raise ValueError(f"lost_hysteresis must be >= 0, got {lost_hysteresis}")
         self._inner = inner
@@ -105,10 +103,7 @@ class TrackedFaceDetector:
 
     def _handle_miss(self) -> FaceDetection | None:
         self._missed_frames += 1
-        if (
-            self._missed_frames <= self._lost_hysteresis
-            and self._last_detection is not None
-        ):
+        if self._missed_frames <= self._lost_hysteresis and self._last_detection is not None:
             # Hold onto the last known good detection. Do NOT touch
             # smoothing state so that when tracking recovers on the next
             # frame the EMA continues without a jump.

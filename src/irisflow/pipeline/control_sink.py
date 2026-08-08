@@ -165,9 +165,7 @@ class ControlSink:
         self._safety.on_face_lost()
         if self._safety.is_paused and self._safety.pause_reason == "face_lost":
             self._cursor.disable()
-            self._bus.publish(
-                SafetyPaused(timestamp=self._clock.monotonic(), reason="face_lost")
-            )
+            self._bus.publish(SafetyPaused(timestamp=self._clock.monotonic(), reason="face_lost"))
 
     def _on_face_acquired(self, event: Event) -> None:
         if not isinstance(event, FaceAcquired):
@@ -227,6 +225,4 @@ class ControlSink:
         self._cursor.disable()
         if changed:
             self._log.warning("safety.paused", reason=reason)
-            self._bus.publish(
-                SafetyPaused(timestamp=self._clock.monotonic(), reason=reason)
-            )
+            self._bus.publish(SafetyPaused(timestamp=self._clock.monotonic(), reason=reason))

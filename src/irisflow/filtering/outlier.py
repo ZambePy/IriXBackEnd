@@ -31,9 +31,7 @@ class OutlierRejector:
 
     def __post_init__(self) -> None:
         if self.max_velocity_px_per_s <= 0:
-            raise ValueError(
-                f"max_velocity_px_per_s must be > 0, got {self.max_velocity_px_per_s}"
-            )
+            raise ValueError(f"max_velocity_px_per_s must be > 0, got {self.max_velocity_px_per_s}")
 
     def step(self, sample: SignalSample) -> SignalSample:
         last = self._last

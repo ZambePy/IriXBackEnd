@@ -183,9 +183,7 @@ class WebcamSource(BaseFrameSource):
             cap = self._capture_factory(self._device_id)
         except Exception as exc:
             self._last_error = f"factory raised: {exc}"
-            self._log.warning(
-                "capture.open_failed", device_id=self._device_id, error=str(exc)
-            )
+            self._log.warning("capture.open_failed", device_id=self._device_id, error=str(exc))
             return False
         if not self._is_opened(cap):
             with contextlib.suppress(Exception):
@@ -222,9 +220,7 @@ class WebcamSource(BaseFrameSource):
             ok, data = cap.read()
         except Exception as exc:
             self._last_error = f"read raised: {exc}"
-            self._log.warning(
-                "capture.read_raised", device_id=self._device_id, error=str(exc)
-            )
+            self._log.warning("capture.read_raised", device_id=self._device_id, error=str(exc))
             return None
         if not ok or data is None:
             self._last_error = "read returned no data"

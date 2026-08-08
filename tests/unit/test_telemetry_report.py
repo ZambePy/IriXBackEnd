@@ -82,14 +82,10 @@ def test_click_count_matches_dwell_click_events() -> None:
 
 def test_face_lost_ratio_uses_state_windows() -> None:
     events: list[Event] = [
-        StateChanged(previous=PipelineState.IDLE, current=PipelineState.TRACKING,
-                     timestamp=0.0),
-        StateChanged(previous=PipelineState.TRACKING, current=PipelineState.LOST,
-                     timestamp=1.0),
-        StateChanged(previous=PipelineState.LOST, current=PipelineState.TRACKING,
-                     timestamp=1.5),
-        StateChanged(previous=PipelineState.TRACKING, current=PipelineState.IDLE,
-                     timestamp=2.0),
+        StateChanged(previous=PipelineState.IDLE, current=PipelineState.TRACKING, timestamp=0.0),
+        StateChanged(previous=PipelineState.TRACKING, current=PipelineState.LOST, timestamp=1.0),
+        StateChanged(previous=PipelineState.LOST, current=PipelineState.TRACKING, timestamp=1.5),
+        StateChanged(previous=PipelineState.TRACKING, current=PipelineState.IDLE, timestamp=2.0),
     ]
     report = build_session_report(session_id="s", events=events)
     # 0.5s lost out of 2s

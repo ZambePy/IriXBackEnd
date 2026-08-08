@@ -39,9 +39,7 @@ class CalibrationTarget:
 
     def __post_init__(self) -> None:
         if not 0.0 <= self.nx <= 1.0 or not 0.0 <= self.ny <= 1.0:
-            raise ValueError(
-                f"target coordinates must be in [0,1], got ({self.nx}, {self.ny})"
-            )
+            raise ValueError(f"target coordinates must be in [0,1], got ({self.nx}, {self.ny})")
         if self.index < 0:
             raise ValueError(f"target index must be >= 0, got {self.index}")
 
@@ -50,9 +48,7 @@ class CalibrationTarget:
         return (self.nx, self.ny)
 
 
-def generate_targets(
-    count: TargetCount, *, margin: float = 0.08
-) -> list[CalibrationTarget]:
+def generate_targets(count: TargetCount, *, margin: float = 0.08) -> list[CalibrationTarget]:
     """Return the canonical grid for ``count`` targets.
 
     Args:
@@ -78,21 +74,35 @@ def generate_targets(
 
     if count == 5:
         raw: list[tuple[float, float]] = [
-            (lo, lo), (hi, lo),
+            (lo, lo),
+            (hi, lo),
             (mid, mid),
-            (lo, hi), (hi, hi),
+            (lo, hi),
+            (hi, hi),
         ]
     elif count == 9:
         raw = [
-            (lo, lo),  (mid, lo),  (hi, lo),
-            (lo, mid), (mid, mid), (hi, mid),
-            (lo, hi),  (mid, hi),  (hi, hi),
+            (lo, lo),
+            (mid, lo),
+            (hi, lo),
+            (lo, mid),
+            (mid, mid),
+            (hi, mid),
+            (lo, hi),
+            (mid, hi),
+            (hi, hi),
         ]
     elif count == 13:
         raw = [
-            (lo, lo),        (mid, lo),        (hi, lo),
-            (lo, mid),       (mid, mid),       (hi, mid),
-            (lo, hi),        (mid, hi),        (hi, hi),
+            (lo, lo),
+            (mid, lo),
+            (hi, lo),
+            (lo, mid),
+            (mid, mid),
+            (hi, mid),
+            (lo, hi),
+            (mid, hi),
+            (hi, hi),
             ((lo + mid) / 2, lo),
             ((mid + hi) / 2, lo),
             ((lo + mid) / 2, hi),

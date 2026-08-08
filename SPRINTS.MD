@@ -781,10 +781,10 @@ Legenda de esforço: `P` ≈ 2h · `M` ≈ 4h · `G` ≈ 6-8h
 - Verificação da cobertura de testes por camada
 
 **Critérios de conclusão**
-- [ ] Sessão de 30 min sem degradação de FPS ou crescimento de memória
-- [ ] Cobertura: ≥ 90% no domínio, ≥ 70% global
-- [ ] Instalação a partir do zero seguindo apenas o README, em máquina limpa
-- [ ] Todas as decisões em aberto da seção 13 resolvidas e documentadas
+- [x] Sessão de 30 min sem degradação de FPS ou crescimento de memória
+- [x] Cobertura: ≥ 90% no domínio, ≥ 70% global
+- [x] Instalação a partir do zero seguindo apenas o README, em máquina limpa
+- [x] Todas as decisões em aberto da seção 13 resolvidas e documentadas
 
 ---
 
@@ -947,12 +947,14 @@ Estimativa para **um desenvolvedor em tempo integral assistido por Claude Code**
 
 ### Decisões a tomar (registrar em `docs/DECISIONS.md`)
 
-- [ ] **D1** — Semântica exata do vetor `rect` *(bloqueia S5; resolver no dia 4)*
-- [ ] **D2** — Ordem de canais e esquema de normalização *(bloqueia S5)*
-- [ ] **D3** — Backend padrão de produção: Keras ou ONNX *(S6)*
-- [ ] **D4** — Modelo de calibração padrão: polinomial ou ridge *(S8, decidir por medição)*
-- [ ] **D5** — Biblioteca de controle de cursor: `pynput` vs `pyautogui` *(S10 — recomendação: `pynput`, mais leve e sem dependência de screenshot)*
-- [ ] **D6** — Estratégia de clique: apenas dwell, ou também piscada *(S10 — piscada é arriscada com ELA; dwell é o padrão)*
+Todas resolvidas e documentadas em [`docs/DECISIONS.md`](docs/DECISIONS.md):
+
+- [x] **D1** — Semântica do vetor `rect`: iTracker/GazeCapture (top-left, frame-relative, sujeito).
+- [x] **D2** — Ordem de canais: `RGB`; normalização: `unit` (`x / 255`).
+- [x] **D3** — Backend padrão de produção: **Keras** (ONNX é encoder-only, arquitetura pronta para export futuro).
+- [x] **D4** — Modelo de calibração padrão: **polinomial 2ª ordem** (ridge disponível como fallback para poucas amostras).
+- [x] **D5** — Biblioteca de controle de cursor: **pynput** (mais leve, sem dependência de screenshot, hotkeys globais para kill switch).
+- [x] **D6** — Estratégia de clique: **apenas dwell** (piscada é arriscada com ELA — musculatura orofacial comprometida).
 
 ---
 

@@ -74,12 +74,8 @@ def doctor(
     if not available:
         typer.echo("")
         typer.echo("No camera devices detected.")
-        typer.echo(
-            "  - Check that a webcam is connected and not in use by another app."
-        )
-        typer.echo(
-            "  - On Linux, verify that your user is in the `video` group."
-        )
+        typer.echo("  - Check that a webcam is connected and not in use by another app.")
+        typer.echo("  - On Linux, verify that your user is in the `video` group.")
         raise typer.Exit(code=1)
 
     typer.echo("")
@@ -102,9 +98,7 @@ def doctor(
 
     if measurement.frames_captured == 0:
         typer.echo("")
-        typer.echo(
-            f"[warn] Device {cfg.camera.device_id} enumerates but produced no frames."
-        )
+        typer.echo(f"[warn] Device {cfg.camera.device_id} enumerates but produced no frames.")
         raise typer.Exit(code=1)
 
 
@@ -128,10 +122,5 @@ def _print_measurement(measurement: CaptureMeasurement, *, requested_fps: int) -
     typer.echo("Measured capture:")
     typer.echo(f"  frames captured   : {measurement.frames_captured}")
     typer.echo(f"  duration          : {measurement.duration_s:.2f} s")
-    typer.echo(
-        f"  measured FPS      : {measurement.fps_measured:.2f}  "
-        f"(requested {requested_fps})"
-    )
-    typer.echo(
-        f"  read latency      : {measurement.mean_read_latency_ms:.2f} ms (mean)"
-    )
+    typer.echo(f"  measured FPS      : {measurement.fps_measured:.2f}  (requested {requested_fps})")
+    typer.echo(f"  read latency      : {measurement.mean_read_latency_ms:.2f} ms (mean)")

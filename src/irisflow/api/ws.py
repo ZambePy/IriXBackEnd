@@ -100,9 +100,7 @@ async def gaze_socket(websocket: WebSocket) -> None:
             await websocket.close()
 
 
-async def _handle_client_text(
-    state: AppState, websocket: WebSocket, raw: str
-) -> None:
+async def _handle_client_text(state: AppState, websocket: WebSocket, raw: str) -> None:
     try:
         payload: Any = json.loads(raw)
     except json.JSONDecodeError:
@@ -122,9 +120,7 @@ async def _handle_client_text(
         await _send(websocket, ErrorMessage(code="pipeline_error", message=str(exc)))
 
 
-async def _dispatch(
-    state: AppState, websocket: WebSocket, message: ClientMessage
-) -> None:
+async def _dispatch(state: AppState, websocket: WebSocket, message: ClientMessage) -> None:
     if isinstance(message, StartTrackingMessage):
         state.request_pipeline_resume()
         return

@@ -50,10 +50,12 @@ def test_recorder_captures_all_relevant_events(tmp_path: Path) -> None:
     rec = _recorder(tmp_path / "s.jsonl", bus)
     rec.start()
 
-    bus.publish(RawGazeReady(frame_id=1, timestamp=0.1, x=0.5, y=0.5,
-                             confidence=1.0, inference_ms=3.0))
-    bus.publish(GazeUpdated(frame_id=1, timestamp=0.1, px=400, py=300,
-                            is_fixation=False, confidence=1.0))
+    bus.publish(
+        RawGazeReady(frame_id=1, timestamp=0.1, x=0.5, y=0.5, confidence=1.0, inference_ms=3.0)
+    )
+    bus.publish(
+        GazeUpdated(frame_id=1, timestamp=0.1, px=400, py=300, is_fixation=False, confidence=1.0)
+    )
     bus.publish(FaceLost(frame_id=2, timestamp=0.2, duration_ms=0.0))
     bus.publish(FaceAcquired(frame_id=3, timestamp=0.3))
     bus.publish(SafetyPaused(timestamp=0.4, reason="kill_switch"))
@@ -69,12 +71,14 @@ def test_recorder_unsubscribes_on_stop(tmp_path: Path) -> None:
     bus = EventBus()
     rec = _recorder(tmp_path / "s.jsonl", bus)
     rec.start()
-    bus.publish(RawGazeReady(frame_id=1, timestamp=0.0, x=0.5, y=0.5,
-                             confidence=1.0, inference_ms=0.0))
+    bus.publish(
+        RawGazeReady(frame_id=1, timestamp=0.0, x=0.5, y=0.5, confidence=1.0, inference_ms=0.0)
+    )
     rec.stop()
     # After stop, further events must not land in the file.
-    bus.publish(RawGazeReady(frame_id=2, timestamp=0.5, x=0.1, y=0.1,
-                             confidence=1.0, inference_ms=0.0))
+    bus.publish(
+        RawGazeReady(frame_id=2, timestamp=0.5, x=0.1, y=0.1, confidence=1.0, inference_ms=0.0)
+    )
     _, events = read_session_file(rec.output_path)
     assert len(events) == 1
 
@@ -82,8 +86,9 @@ def test_recorder_unsubscribes_on_stop(tmp_path: Path) -> None:
 def test_recorder_is_context_manager(tmp_path: Path) -> None:
     bus = EventBus()
     with _recorder(tmp_path / "s.jsonl", bus) as rec:
-        bus.publish(RawGazeReady(frame_id=1, timestamp=0.0, x=0.5, y=0.5,
-                                 confidence=1.0, inference_ms=0.0))
+        bus.publish(
+            RawGazeReady(frame_id=1, timestamp=0.0, x=0.5, y=0.5, confidence=1.0, inference_ms=0.0)
+        )
     assert not rec.is_started
     _, events = read_session_file(rec.output_path)
     assert len(events) == 1
@@ -94,8 +99,9 @@ def test_recorder_start_is_idempotent(tmp_path: Path) -> None:
     rec = _recorder(tmp_path / "s.jsonl", bus)
     rec.start()
     rec.start()  # no crash, no duplicate subscription
-    bus.publish(RawGazeReady(frame_id=1, timestamp=0.0, x=0.5, y=0.5,
-                             confidence=1.0, inference_ms=0.0))
+    bus.publish(
+        RawGazeReady(frame_id=1, timestamp=0.0, x=0.5, y=0.5, confidence=1.0, inference_ms=0.0)
+    )
     rec.stop()
     _, events = read_session_file(rec.output_path)
     assert len(events) == 1
@@ -115,7 +121,10 @@ def test_recorder_counts_events_written(tmp_path: Path) -> None:
     rec = _recorder(tmp_path / "s.jsonl", bus)
     rec.start()
     for i in range(5):
-        bus.publish(RawGazeReady(frame_id=i, timestamp=i * 0.033,
-                                 x=0.5, y=0.5, confidence=1.0, inference_ms=0.0))
+        bus.publish(
+            RawGazeReady(
+                frame_id=i, timestamp=i * 0.033, x=0.5, y=0.5, confidence=1.0, inference_ms=0.0
+            )
+        )
     rec.stop()
     assert rec.events_written == 5

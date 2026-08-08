@@ -203,9 +203,7 @@ def test_property_normalize_and_denormalize_roundtrip_within_one_pixel(
     low=st.floats(min_value=-100.0, max_value=100.0, allow_nan=False),
     span=st.floats(min_value=0.0, max_value=200.0, allow_nan=False),
 )
-def test_property_clamp_result_is_within_bounds(
-    value: float, low: float, span: float
-) -> None:
+def test_property_clamp_result_is_within_bounds(value: float, low: float, span: float) -> None:
     high = low + span
     result = clamp(value, low, high)
     assert low <= result <= high

@@ -125,9 +125,7 @@ def _build_components(
         state=PipelineStateMachine(bus, clock=clock),
         metrics=MetricsRecorder(_clock=clock),
         clock=clock,
-        mapper=IdentityScreenMapper(
-            screen_width=screen_width, screen_height=screen_height
-        ),
+        mapper=IdentityScreenMapper(screen_width=screen_width, screen_height=screen_height),
         filter_chain=chain,
         cursor=cursor,
     )
@@ -165,9 +163,7 @@ def _build_sink(
 def test_runner_moves_cursor_and_fires_dwell_click() -> None:
     clock = _AutoAdvanceClock(step_s=0.05)
     cursor = _RecordingCursor()
-    components, bus = _build_components(
-        trajectory=[(0.5, 0.5)], cursor=cursor, clock=clock
-    )
+    components, bus = _build_components(trajectory=[(0.5, 0.5)], cursor=cursor, clock=clock)
     sink = _build_sink(bus, cursor, clock, dwell_duration_ms=50)
     sink.start()
 
@@ -209,9 +205,7 @@ def test_runner_moves_cursor_and_fires_dwell_click() -> None:
 def test_stop_disables_cursor_and_control_sink_cleans_up() -> None:
     clock = _AutoAdvanceClock(step_s=0.05)
     cursor = _RecordingCursor()
-    components, bus = _build_components(
-        trajectory=[(0.1, 0.1)], cursor=cursor, clock=clock
-    )
+    components, bus = _build_components(trajectory=[(0.1, 0.1)], cursor=cursor, clock=clock)
     sink = _build_sink(bus, cursor, clock)
     sink.start()
     runner = PipelineRunner(components, idle_sleep_s=0.0)
@@ -222,8 +216,9 @@ def test_stop_disables_cursor_and_control_sink_cleans_up() -> None:
     assert not cursor.is_enabled
     # Bus has been unsubscribed — new events reach neither cursor nor dwell.
     old_moves = list(cursor.moves)
-    bus.publish(GazeUpdated(frame_id=999, timestamp=0.0, px=1, py=1,
-                            is_fixation=False, confidence=1.0))
+    bus.publish(
+        GazeUpdated(frame_id=999, timestamp=0.0, px=1, py=1, is_fixation=False, confidence=1.0)
+    )
     assert cursor.moves == old_moves
 
 
@@ -231,9 +226,7 @@ def test_runner_never_moves_mouse_when_control_sink_disabled() -> None:
     """DoD: automated suite must never move the developer's mouse."""
     clock = _AutoAdvanceClock(step_s=0.05)
     cursor = _RecordingCursor()
-    components, bus = _build_components(
-        trajectory=[(0.7, 0.7)], cursor=cursor, clock=clock
-    )
+    components, bus = _build_components(trajectory=[(0.7, 0.7)], cursor=cursor, clock=clock)
     # Note: sink NOT started → nothing subscribes to GazeUpdated.
     del bus  # unused
     runner = PipelineRunner(components, idle_sleep_s=0.0)

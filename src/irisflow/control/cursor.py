@@ -79,10 +79,7 @@ class PynputCursor:
         if not self._enabled:
             return
         now = self._clock.monotonic()
-        if (
-            self._last_move_s is not None
-            and (now - self._last_move_s) < self._min_interval_s
-        ):
+        if self._last_move_s is not None and (now - self._last_move_s) < self._min_interval_s:
             return
         backend = self._ensure_backend()
         try:

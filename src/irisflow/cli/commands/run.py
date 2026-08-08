@@ -380,9 +380,7 @@ def _build_recorder(
 ) -> SessionRecorder:
     import datetime as _dt
 
-    resolved_id = session_id or _dt.datetime.now(_dt.UTC).strftime(
-        "session-%Y%m%dT%H%M%S"
-    )
+    resolved_id = session_id or _dt.datetime.now(_dt.UTC).strftime("session-%Y%m%dT%H%M%S")
     output_path = cfg.telemetry.recordings_dir / f"{resolved_id}.jsonl"
     header = SessionHeader(
         session_id=resolved_id,
@@ -401,9 +399,7 @@ def _build_recorder(
     )
 
 
-def _print_final_report(
-    components: PipelineComponents, recorder: SessionRecorder
-) -> None:
+def _print_final_report(components: PipelineComponents, recorder: SessionRecorder) -> None:
     from irisflow.telemetry.session import read_session_file
 
     try:

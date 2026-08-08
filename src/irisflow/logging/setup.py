@@ -87,9 +87,7 @@ def configure_logging(
         ValueError: ``level`` is not a recognised name.
     """
     if level not in _LEVEL_TO_INT:
-        raise ValueError(
-            f"Unknown log level {level!r}; expected one of {sorted(_LEVEL_TO_INT)}"
-        )
+        raise ValueError(f"Unknown log level {level!r}; expected one of {sorted(_LEVEL_TO_INT)}")
     level_int = _LEVEL_TO_INT[level]
 
     handlers: list[logging.Handler] = []
@@ -194,9 +192,7 @@ def _stdlib_formatter(renderer: Processor) -> structlog.stdlib.ProcessorFormatte
     )
 
 
-def _add_monotonic_timestamp(
-    _logger: Any, _method: str, event_dict: EventDict
-) -> EventDict:
+def _add_monotonic_timestamp(_logger: Any, _method: str, event_dict: EventDict) -> EventDict:
     """Attach both a monotonic ``ts_mono`` and an ISO ``timestamp``.
 
     Monotonic time is what latency measurements are computed against; wall

@@ -31,7 +31,7 @@ __all__ = ["preview"]
 
 
 _WINDOW_TITLE = "IrisFlow preview"
-_FACE_COLOR = (0, 255, 0)     # BGR — green
+_FACE_COLOR = (0, 255, 0)  # BGR — green
 _LEFT_EYE_COLOR = (0, 165, 255)  # orange (subject's left)
 _RIGHT_EYE_COLOR = (255, 128, 0)  # blue-ish (subject's right)
 
@@ -102,9 +102,7 @@ def preview(
 
 def _draw_overlay(image, detection: FaceDetection | None, hysteresis: bool) -> None:  # type: ignore[no-untyped-def]
     if detection is None:
-        cv2.putText(
-            image, "no face", (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2
-        )
+        cv2.putText(image, "no face", (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         return
     face = detection.face_bbox
     left = detection.left_eye_bbox
@@ -113,6 +111,4 @@ def _draw_overlay(image, detection: FaceDetection | None, hysteresis: bool) -> N
     cv2.rectangle(image, (left.x, left.y), (left.x2, left.y2), _LEFT_EYE_COLOR, 2)
     cv2.rectangle(image, (right.x, right.y), (right.x2, right.y2), _RIGHT_EYE_COLOR, 2)
     label = "TRACKING (held)" if hysteresis else "TRACKING"
-    cv2.putText(
-        image, label, (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2
-    )
+    cv2.putText(image, label, (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)

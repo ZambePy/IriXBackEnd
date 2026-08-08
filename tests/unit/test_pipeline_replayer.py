@@ -46,9 +46,7 @@ def _build_replayer(cursor_enabled: bool = True) -> SessionReplayer:
             rest_zone=RestZone(0, 0, 0, 0),
             clock=clock,
         ),
-        dwell=DwellClicker(
-            DwellParams(radius_px=200, duration_ms=50, refractory_ms=20)
-        ),
+        dwell=DwellClicker(DwellParams(radius_px=200, duration_ms=50, refractory_ms=20)),
         cursor_enabled=cursor_enabled,
         clock=clock,
     )

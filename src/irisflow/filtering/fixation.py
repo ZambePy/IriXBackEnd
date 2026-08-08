@@ -45,8 +45,7 @@ class FixationClassifier:
     def __post_init__(self) -> None:
         if self.velocity_threshold_px_per_s <= 0:
             raise ValueError(
-                f"velocity_threshold_px_per_s must be > 0, got "
-                f"{self.velocity_threshold_px_per_s}"
+                f"velocity_threshold_px_per_s must be > 0, got {self.velocity_threshold_px_per_s}"
             )
 
     def classify(self, sample: SignalSample) -> FixationDecision:

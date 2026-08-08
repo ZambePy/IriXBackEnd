@@ -90,12 +90,8 @@ class ModelInputBuilder:
         # Preallocated float32 CNN-ready tensors — the fields of every
         # ModelInput this builder produces reference these.
         self._out_face: NDArray[np.float32] = np.empty((fh, fw, 3), dtype=np.float32)
-        self._out_left_eye: NDArray[np.float32] = np.empty(
-            (eh, ew, 3), dtype=np.float32
-        )
-        self._out_right_eye: NDArray[np.float32] = np.empty(
-            (eh, ew, 3), dtype=np.float32
-        )
+        self._out_left_eye: NDArray[np.float32] = np.empty((eh, ew, 3), dtype=np.float32)
+        self._out_right_eye: NDArray[np.float32] = np.empty((eh, ew, 3), dtype=np.float32)
         self._out_rect: NDArray[np.float32] = np.empty(RECT_DIM, dtype=np.float32)
 
     # ------------------------------------------------------------------ API

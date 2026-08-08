@@ -19,9 +19,13 @@ def _stable_sample(nx: float = 0.5, ny: float = 0.5, jitter: float = 0.001) -> R
 
 def test_collector_waits_for_stabilization_then_collects() -> None:
     collector = TargetCollector(
-        target_index=0, target_nx=0.5, target_ny=0.5,
-        samples_per_point=3, stabilization_ms=500,
-        stability_window=2, stability_threshold=0.05,
+        target_index=0,
+        target_nx=0.5,
+        target_ny=0.5,
+        samples_per_point=3,
+        stabilization_ms=500,
+        stability_window=2,
+        stability_threshold=0.05,
     )
     collector.mark_shown(timestamp_s=0.0)
     # Before stabilization: samples are seen but not accepted
@@ -37,9 +41,13 @@ def test_collector_waits_for_stabilization_then_collects() -> None:
 
 def test_collector_face_lost_clears_stability_window() -> None:
     collector = TargetCollector(
-        target_index=0, target_nx=0.5, target_ny=0.5,
-        samples_per_point=3, stabilization_ms=100,
-        stability_window=2, stability_threshold=0.05,
+        target_index=0,
+        target_nx=0.5,
+        target_ny=0.5,
+        samples_per_point=3,
+        stabilization_ms=100,
+        stability_window=2,
+        stability_threshold=0.05,
     )
     collector.mark_shown(timestamp_s=0.0)
     # Fill window
@@ -56,9 +64,13 @@ def test_collector_face_lost_clears_stability_window() -> None:
 
 def test_collector_rejects_unstable_samples() -> None:
     collector = TargetCollector(
-        target_index=0, target_nx=0.5, target_ny=0.5,
-        samples_per_point=2, stabilization_ms=0,
-        stability_window=3, stability_threshold=0.02,
+        target_index=0,
+        target_nx=0.5,
+        target_ny=0.5,
+        samples_per_point=2,
+        stabilization_ms=0,
+        stability_window=3,
+        stability_threshold=0.02,
     )
     collector.mark_shown(timestamp_s=0.0)
     # Wildly varying samples => never stable
@@ -70,9 +82,13 @@ def test_collector_rejects_unstable_samples() -> None:
 
 def test_collector_abort_stops_further_collection() -> None:
     collector = TargetCollector(
-        target_index=0, target_nx=0.5, target_ny=0.5,
-        samples_per_point=3, stabilization_ms=0,
-        stability_window=1, stability_threshold=0.1,
+        target_index=0,
+        target_nx=0.5,
+        target_ny=0.5,
+        samples_per_point=3,
+        stabilization_ms=0,
+        stability_window=1,
+        stability_threshold=0.1,
     )
     collector.mark_shown(timestamp_s=0.0)
     collector.abort()
@@ -95,9 +111,13 @@ def test_collector_force_done_requires_samples() -> None:
 
 def test_collector_force_done_short_circuits_after_one_sample() -> None:
     collector = TargetCollector(
-        target_index=0, target_nx=0.5, target_ny=0.5,
-        samples_per_point=100, stabilization_ms=0,
-        stability_window=1, stability_threshold=0.1,
+        target_index=0,
+        target_nx=0.5,
+        target_ny=0.5,
+        samples_per_point=100,
+        stabilization_ms=0,
+        stability_window=1,
+        stability_threshold=0.1,
     )
     collector.mark_shown(timestamp_s=0.0)
     collector.push_sample(_stable_sample(), timestamp_s=0.1)
@@ -119,9 +139,13 @@ def test_collector_rejects_bad_config() -> None:
 
 def test_collector_ignores_pushes_after_done() -> None:
     collector = TargetCollector(
-        target_index=0, target_nx=0.5, target_ny=0.5,
-        samples_per_point=1, stabilization_ms=0,
-        stability_window=1, stability_threshold=0.1,
+        target_index=0,
+        target_nx=0.5,
+        target_ny=0.5,
+        samples_per_point=1,
+        stabilization_ms=0,
+        stability_window=1,
+        stability_threshold=0.1,
     )
     collector.mark_shown(timestamp_s=0.0)
     collector.push_sample(_stable_sample(), timestamp_s=0.1)
@@ -133,9 +157,13 @@ def test_collector_ignores_pushes_after_done() -> None:
 
 def test_collector_mark_shown_after_collecting_raises() -> None:
     collector = TargetCollector(
-        target_index=0, target_nx=0.5, target_ny=0.5,
-        samples_per_point=5, stabilization_ms=0,
-        stability_window=1, stability_threshold=0.1,
+        target_index=0,
+        target_nx=0.5,
+        target_ny=0.5,
+        samples_per_point=5,
+        stabilization_ms=0,
+        stability_window=1,
+        stability_threshold=0.1,
     )
     collector.mark_shown(timestamp_s=0.0)
     collector.push_sample(_stable_sample(), timestamp_s=0.1)  # transitions to COLLECTING
@@ -144,14 +172,26 @@ def test_collector_mark_shown_after_collecting_raises() -> None:
 
 
 def test_flatten_batches_produces_aligned_arrays() -> None:
-    b1 = TargetCollector(target_index=0, target_nx=0.1, target_ny=0.2,
-                         samples_per_point=1, stabilization_ms=0,
-                         stability_window=1, stability_threshold=0.1)
+    b1 = TargetCollector(
+        target_index=0,
+        target_nx=0.1,
+        target_ny=0.2,
+        samples_per_point=1,
+        stabilization_ms=0,
+        stability_window=1,
+        stability_threshold=0.1,
+    )
     b1.mark_shown(0.0)
     b1.push_sample(RawGaze(x=0.11, y=0.21, confidence=1.0, inference_ms=1.0), 0.1)
-    b2 = TargetCollector(target_index=1, target_nx=0.9, target_ny=0.8,
-                         samples_per_point=1, stabilization_ms=0,
-                         stability_window=1, stability_threshold=0.1)
+    b2 = TargetCollector(
+        target_index=1,
+        target_nx=0.9,
+        target_ny=0.8,
+        samples_per_point=1,
+        stabilization_ms=0,
+        stability_window=1,
+        stability_threshold=0.1,
+    )
     b2.mark_shown(0.0)
     b2.push_sample(RawGaze(x=0.91, y=0.81, confidence=1.0, inference_ms=1.0), 0.1)
     samples, targets, indices = flatten_batches([b1.batch(), b2.batch()])

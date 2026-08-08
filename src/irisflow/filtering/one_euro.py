@@ -78,9 +78,7 @@ class OneEuroFilter:
         dt = sample.timestamp - self._last_ts
         if dt <= 0:
             # Non-monotonic timestamps: reuse last state, do not advance.
-            return SignalSample(
-                x=self._last_x, y=self._last_y, timestamp=sample.timestamp
-            )
+            return SignalSample(x=self._last_x, y=self._last_y, timestamp=sample.timestamp)
 
         # 1) Estimate derivative, smoothed.
         raw_dx = (sample.x - self._last_x) / dt

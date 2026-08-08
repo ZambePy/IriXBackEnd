@@ -38,7 +38,10 @@ path of the offending field.
 | `refine_landmarks` | `bool` | `true` | Required for iris landmarks |
 | `roi_margin` | `float 0..1` | `0.20` | Extra padding around raw ROI |
 | `smoothing_alpha` | `float 0..1` | `0.4` | EMA over ROI boxes |
-| `lost_hysteresis_frames` | `int ≥ 1` | `5` | Frames without face before LOST |
+| `lost_hysteresis_frames` | `int ≥ 0` | `5` | Frames without face before LOST |
+| `face_model_path` | `Path` | `models/face_landmarker.task` | MediaPipe 1.0 asset — required |
+| `min_detection_confidence` | `float 0..1` | `0.5` | FaceLandmarker threshold |
+| `min_tracking_confidence` | `float 0..1` | `0.5` | Landmark tracking threshold |
 
 ### `model` — Sprint 6
 | Field | Type | Default | Notes |
@@ -109,3 +112,30 @@ path of the offending field.
 The pipeline stages bind `frame_id` (and often `stage`) into the ambient
 context via `irisflow.logging.bind_frame` / `bound(...)` so every event
 downstream is traceable back to the frame that produced it.
+
+## API surface (Sprint 12)
+
+The FastAPI + WebSocket layer is opt-in via the `api` extra and does not
+add config fields — it consumes the same `AppConfig`. Runtime knobs
+exposed via `PATCH /config` (allowlist enforced in
+`src/irisflow/api/routes/config.py`):
+
+- `control.dwell.radius_px`, `control.dwell.duration_ms`,
+  `control.dwell.refractory_ms`
+- `control.enabled`
+- `filtering.one_euro.min_cutoff`, `.beta`, `.d_cutoff`
+- `filtering.fixation.velocity_threshold_px_per_s`
+
+Anything else (camera, model backend, calibration profile dir, ...)
+requires a full pipeline rebuild and is refused with `400`.
+
+## Environment overrides (Sprint 1)
+
+Nested keys use `__` (double underscore). JSON-looking values are parsed
+as JSON; the rest is coerced by Pydantic.
+
+```
+IRISFLOW_CAMERA__DEVICE_ID=1        # → camera.device_id = 1
+IRISFLOW_CONTROL__ENABLED=true      # → control.enabled = true
+IRISFLOW_LOGGING__LEVEL=DEBUG       # → logging.level = "DEBUG"
+```

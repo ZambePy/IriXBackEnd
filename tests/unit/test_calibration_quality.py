@@ -98,12 +98,20 @@ def test_polynomial_reduces_error_at_least_30pct_vs_passthrough() -> None:
     poly.fit(train_raw, train_tgt)
 
     baseline = evaluate_calibration(
-        passthrough, holdout_raw, holdout_tgt,
-        screen_width=1920, screen_height=1080, target_indices=holdout_indices,
+        passthrough,
+        holdout_raw,
+        holdout_tgt,
+        screen_width=1920,
+        screen_height=1080,
+        target_indices=holdout_indices,
     )
     calibrated = evaluate_calibration(
-        poly, holdout_raw, holdout_tgt,
-        screen_width=1920, screen_height=1080, target_indices=holdout_indices,
+        poly,
+        holdout_raw,
+        holdout_tgt,
+        screen_width=1920,
+        screen_height=1080,
+        target_indices=holdout_indices,
     )
     reduction = 1.0 - calibrated.mean_error_px / baseline.mean_error_px
     assert reduction >= 0.30, (
@@ -135,7 +143,8 @@ def test_evaluate_rejects_mismatched_shapes() -> None:
             _PassthroughModel(),
             [RawGaze(x=0.5, y=0.5, confidence=1.0, inference_ms=1.0)],
             [(0.1, 0.1), (0.2, 0.2)],
-            screen_width=1920, screen_height=1080,
+            screen_width=1920,
+            screen_height=1080,
         )
 
 
@@ -148,8 +157,12 @@ def test_identify_bad_targets_picks_worst() -> None:
     model = AffineCalibration()
     model.fit(raw, tgt)
     report = evaluate_calibration(
-        model, raw, tgt,
-        screen_width=1920, screen_height=1080, target_indices=indices,
+        model,
+        raw,
+        tgt,
+        screen_width=1920,
+        screen_height=1080,
+        target_indices=indices,
     )
     bad = identify_bad_targets(report, threshold_px=50.0)
     assert 0 in bad

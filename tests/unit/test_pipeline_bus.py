@@ -11,9 +11,7 @@ def _face_lost(frame_id: int = 0) -> FaceLost:
 
 
 def _state_changed() -> StateChanged:
-    return StateChanged(
-        previous=PipelineState.IDLE, current=PipelineState.TRACKING, timestamp=0.0
-    )
+    return StateChanged(previous=PipelineState.IDLE, current=PipelineState.TRACKING, timestamp=0.0)
 
 
 def test_typed_subscription_only_receives_matching_events() -> None:

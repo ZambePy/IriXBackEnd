@@ -51,9 +51,7 @@ def _affine_features(xs: NDArray[np.float64], ys: NDArray[np.float64]) -> NDArra
     return np.stack([ones, xs, ys], axis=1)
 
 
-def _polynomial_features(
-    xs: NDArray[np.float64], ys: NDArray[np.float64]
-) -> NDArray[np.float64]:
+def _polynomial_features(xs: NDArray[np.float64], ys: NDArray[np.float64]) -> NDArray[np.float64]:
     """Return the ``(N, 6)`` design matrix ``[1, x, y, x², xy, y²]``."""
     ones = np.ones_like(xs)
     return np.stack([ones, xs, ys, xs * xs, xs * ys, ys * ys], axis=1)
@@ -117,9 +115,7 @@ def _ridge(
     """
     n_rows, n_cols = design.shape
     if n_rows < min_rows:
-        raise CalibrationError(
-            f"fit: only {n_rows} samples for ridge; need at least {min_rows}"
-        )
+        raise CalibrationError(f"fit: only {n_rows} samples for ridge; need at least {min_rows}")
     gram = design.T @ design
     penalty = alpha * np.eye(n_cols, dtype=np.float64)
     penalty[0, 0] = 0.0
@@ -179,9 +175,7 @@ class AffineCalibration:
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> AffineCalibration:
         if data.get("kind") != "affine":
-            raise CalibrationError(
-                f"AffineCalibration.from_dict: kind={data.get('kind')!r}"
-            )
+            raise CalibrationError(f"AffineCalibration.from_dict: kind={data.get('kind')!r}")
         weights = np.asarray(data["weights"], dtype=np.float64)
         if weights.shape != (3, 2):
             raise CalibrationError(
@@ -242,9 +236,7 @@ class PolynomialCalibration:
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> PolynomialCalibration:
         if data.get("kind") != "polynomial":
-            raise CalibrationError(
-                f"PolynomialCalibration.from_dict: kind={data.get('kind')!r}"
-            )
+            raise CalibrationError(f"PolynomialCalibration.from_dict: kind={data.get('kind')!r}")
         weights = np.asarray(data["weights"], dtype=np.float64)
         if weights.shape != (6, 2):
             raise CalibrationError(
@@ -313,9 +305,7 @@ class RidgeCalibration:
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> RidgeCalibration:
         if data.get("kind") != "ridge":
-            raise CalibrationError(
-                f"RidgeCalibration.from_dict: kind={data.get('kind')!r}"
-            )
+            raise CalibrationError(f"RidgeCalibration.from_dict: kind={data.get('kind')!r}")
         weights = np.asarray(data["weights"], dtype=np.float64)
         if weights.shape != (6, 2):
             raise CalibrationError(

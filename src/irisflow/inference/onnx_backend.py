@@ -41,9 +41,7 @@ def _load_session(model_path: Path) -> Any:
     if not model_path.exists():
         raise InferenceError(f"ONNX model not found at {model_path!r}.")
     try:
-        return ort.InferenceSession(
-            str(model_path), providers=["CPUExecutionProvider"]
-        )
+        return ort.InferenceSession(str(model_path), providers=["CPUExecutionProvider"])
     except Exception as exc:
         raise InferenceError(f"Failed to load ONNX model {model_path!r}: {exc}") from exc
 
@@ -118,9 +116,7 @@ class OnnxBackend:
         elapsed_ms = (time.perf_counter() - start) * 1000.0
         arr = np.asarray(out[0])
         if arr.shape != (1, 2):
-            raise InferenceError(
-                f"ONNX model returned shape {arr.shape!r}, expected (1, 2)."
-            )
+            raise InferenceError(f"ONNX model returned shape {arr.shape!r}, expected (1, 2).")
         return clamp_gaze(
             float(arr[0, 0]),
             float(arr[0, 1]),
@@ -143,9 +139,7 @@ class OnnxBackend:
         return self._metadata
 
 
-def embed_via_onnx(
-    model_path: Path, model_input: ModelInput
-) -> NDArray[np.float32]:
+def embed_via_onnx(model_path: Path, model_input: ModelInput) -> NDArray[np.float32]:
     """Run the encoder-only ONNX artifact and return the raw embedding.
 
     Only used by :mod:`irisflow.inference.parity`. Not exposed as a

@@ -66,8 +66,7 @@ def test_crop_zero_size_bbox_raises() -> None:
 
 def test_crop_rejects_bad_image_shape() -> None:
     with pytest.raises(ValueError, match=r"\(H, W, 3\)"):
-        crop_with_replicate_pad(np.zeros((10, 10), dtype=np.uint8),
-                                BoundingBox(x=0, y=0, w=1, h=1))
+        crop_with_replicate_pad(np.zeros((10, 10), dtype=np.uint8), BoundingBox(x=0, y=0, w=1, h=1))
 
 
 def test_crop_returns_contiguous_array() -> None:

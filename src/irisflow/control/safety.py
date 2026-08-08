@@ -100,9 +100,7 @@ class SafetyGate:
         clock: Clock | None = None,
     ) -> None:
         if pause_on_face_lost_ms < 0:
-            raise ValueError(
-                f"pause_on_face_lost_ms must be >= 0, got {pause_on_face_lost_ms}"
-            )
+            raise ValueError(f"pause_on_face_lost_ms must be >= 0, got {pause_on_face_lost_ms}")
         self._pause_on_face_lost_ms = pause_on_face_lost_ms
         self._rest_zone = rest_zone
         self._clock: Clock = clock if clock is not None else SystemClock()
@@ -279,9 +277,7 @@ class Watchdog:
                 except Exception:  # pragma: no cover - defensive
                     return
 
-        self._thread = threading.Thread(
-            target=_loop, name="irisflow-watchdog", daemon=True
-        )
+        self._thread = threading.Thread(target=_loop, name="irisflow-watchdog", daemon=True)
         self._thread.start()
 
     def stop(self) -> None:

@@ -25,18 +25,10 @@ app = typer.Typer(
     add_completion=False,
 )
 
-app.command("doctor", help="Enumerate cameras and measure real capture rate.")(
-    _doctor_command
-)
-app.command("preview", help="Overlay face + eye ROIs on the live webcam feed.")(
-    _preview_command
-)
-app.command("bench", help="Inference latency / backend parity / sanity check.")(
-    _bench_command
-)
-app.command("run", help="Fim-a-fim: webcam -> gaze coordinate in the terminal.")(
-    _run_command
-)
+app.command("doctor", help="Enumerate cameras and measure real capture rate.")(_doctor_command)
+app.command("preview", help="Overlay face + eye ROIs on the live webcam feed.")(_preview_command)
+app.command("bench", help="Inference latency / backend parity / sanity check.")(_bench_command)
+app.command("run", help="Fim-a-fim: webcam -> gaze coordinate in the terminal.")(_run_command)
 app.command(
     "calibrate",
     help="Run a per-user calibration session and save the fitted profile.",
