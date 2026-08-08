@@ -10,9 +10,22 @@ from __future__ import annotations
 
 from typing import Final
 
-__all__ = ["STAGE_CAPTURE", "STAGE_DETECTION", "STAGE_INFERENCE", "STAGE_PREPROCESS"]
+__all__ = [
+    "STAGE_CALIBRATE",
+    "STAGE_CAPTURE",
+    "STAGE_CONTROL",
+    "STAGE_DETECTION",
+    "STAGE_FILTER",
+    "STAGE_INFERENCE",
+    "STAGE_MAP",
+    "STAGE_PREPROCESS",
+]
 
 STAGE_CAPTURE: Final[str] = "capture"
 STAGE_DETECTION: Final[str] = "detection"
 STAGE_PREPROCESS: Final[str] = "preprocess"
 STAGE_INFERENCE: Final[str] = "inference"
+STAGE_CALIBRATE: Final[str] = "calibrate"
+STAGE_MAP: Final[str] = "map"
+STAGE_FILTER: Final[str] = "filter"
+STAGE_CONTROL: Final[str] = "control"

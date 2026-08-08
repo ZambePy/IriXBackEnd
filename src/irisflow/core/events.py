@@ -18,12 +18,16 @@ from typing import Literal
 __all__ = [
     "CalibrationPhase",
     "CalibrationProgress",
+    "DwellClick",
+    "DwellProgress",
     "Event",
     "FaceAcquired",
     "FaceLost",
     "GazeUpdated",
     "PipelineState",
     "RawGazeReady",
+    "SafetyPaused",
+    "SafetyResumed",
     "StateChanged",
 ]
 
@@ -108,6 +112,49 @@ class CalibrationProgress:
     phase: CalibrationPhase
 
 
+@dataclass(frozen=True, slots=True)
+class DwellProgress:
+    """One tick of the dwell-click state machine (Sprint 10).
+
+    ``progress`` is a fraction in ``[0, 1]``: 0 when the pointer just entered
+    a fresh dwell cluster, 1 the instant a click fires. Sinks (frontend or
+    telemetry) can draw a progress ring straight from this value.
+    """
+
+    frame_id: int
+    timestamp: float
+    px: int
+    py: int
+    progress: float
+    radius_px: int
+
+
+@dataclass(frozen=True, slots=True)
+class DwellClick:
+    """A dwell-triggered click at ``(px, py)``. Emitted once per click."""
+
+    frame_id: int
+    timestamp: float
+    px: int
+    py: int
+    button: Literal["left", "right", "middle"] = "left"
+
+
+@dataclass(frozen=True, slots=True)
+class SafetyPaused:
+    """Safety layer disabled the cursor (kill switch, watchdog, face lost)."""
+
+    timestamp: float
+    reason: Literal["kill_switch", "face_lost", "watchdog", "manual"]
+
+
+@dataclass(frozen=True, slots=True)
+class SafetyResumed:
+    """Safety layer re-enabled the cursor after a previous pause."""
+
+    timestamp: float
+
+
 Event = (
     RawGazeReady
     | GazeUpdated
@@ -115,5 +162,9 @@ Event = (
     | FaceAcquired
     | StateChanged
     | CalibrationProgress
+    | DwellProgress
+    | DwellClick
+    | SafetyPaused
+    | SafetyResumed
 )
 """Type alias for anything that can appear on the bus."""

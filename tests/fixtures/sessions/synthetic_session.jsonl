@@ -1,0 +1,13 @@
+{"config": {"filtering": {"chain": ["outlier", "one_euro", "fixation"]}}, "kind": "header", "calibration_profile_id": null, "schema_version": 1, "screen_height_px": 800, "screen_width_px": 1000, "session_id": "fixture-synth-01", "wall_start_s": 0.0}
+{"kind": "event", "type": "StateChanged", "previous": "IDLE", "current": "TRACKING", "timestamp": 0.0}
+{"confidence": 1.0, "frame_id": 0, "inference_ms": 3.0, "kind": "event", "timestamp": 0.033, "type": "RawGazeReady", "x": 0.5, "y": 0.5}
+{"confidence": 1.0, "frame_id": 1, "inference_ms": 3.0, "kind": "event", "timestamp": 0.066, "type": "RawGazeReady", "x": 0.5, "y": 0.5}
+{"confidence": 1.0, "frame_id": 2, "inference_ms": 3.0, "kind": "event", "timestamp": 0.099, "type": "RawGazeReady", "x": 0.5, "y": 0.5}
+{"confidence": 1.0, "frame_id": 3, "inference_ms": 3.0, "kind": "event", "timestamp": 0.132, "type": "RawGazeReady", "x": 0.5, "y": 0.5}
+{"confidence": 1.0, "frame_id": 4, "inference_ms": 3.0, "kind": "event", "timestamp": 0.165, "type": "RawGazeReady", "x": 0.5, "y": 0.5}
+{"confidence": 1.0, "frame_id": 5, "inference_ms": 3.0, "kind": "event", "timestamp": 0.198, "type": "RawGazeReady", "x": 0.5, "y": 0.5}
+{"confidence": 1.0, "frame_id": 6, "inference_ms": 3.0, "kind": "event", "timestamp": 0.231, "type": "RawGazeReady", "x": 0.5, "y": 0.5}
+{"confidence": 1.0, "frame_id": 7, "inference_ms": 3.0, "kind": "event", "timestamp": 0.264, "type": "RawGazeReady", "x": 0.5, "y": 0.5}
+{"confidence": 1.0, "frame_id": 8, "inference_ms": 3.0, "kind": "event", "timestamp": 0.297, "type": "RawGazeReady", "x": 0.5, "y": 0.5}
+{"confidence": 1.0, "frame_id": 9, "inference_ms": 3.0, "kind": "event", "timestamp": 0.330, "type": "RawGazeReady", "x": 0.5, "y": 0.5}
+{"kind": "event", "type": "StateChanged", "previous": "TRACKING", "current": "IDLE", "timestamp": 0.4}

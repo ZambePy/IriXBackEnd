@@ -130,6 +130,7 @@ class SafetyConfig(_Strict):
     kill_switch: str = "ctrl+alt+esc"
     pause_on_face_lost_ms: int = Field(2000, ge=0)
     rest_zone_px: tuple[int, int, int, int] = (0, 0, 0, 0)
+    watchdog_timeout_ms: int = Field(500, ge=0)
 
 
 class ControlConfig(_Strict):

@@ -10,6 +10,14 @@ Design invariants (SPRINTS.md §7 DoD):
 * **No hardware in tests.** Every collaborator is behind a Protocol —
   swap in synthetic sources / stubbed detectors and the loop runs
   offline in CI.
+
+Sprint 10 additions:
+
+* runs the calibration → mapping → filtering chain when those
+  collaborators are wired, and publishes
+  :class:`~irisflow.core.events.GazeUpdated` (px, py) events;
+* kicks the watchdog every tick so the safety layer can tell "pipeline
+  alive" from "pipeline wedged".
 """
 
 from __future__ import annotations
@@ -21,15 +29,20 @@ from collections.abc import Callable
 from irisflow.core.events import (
     FaceAcquired,
     FaceLost,
+    GazeUpdated,
     PipelineState,
     RawGazeReady,
 )
+from irisflow.core.types import CalibratedGaze, RawGaze
 from irisflow.logging import bind, clear_context, get_logger
 from irisflow.pipeline.orchestrator import PipelineComponents
 from irisflow.pipeline.stages import (
+    STAGE_CALIBRATE,
     STAGE_CAPTURE,
     STAGE_DETECTION,
+    STAGE_FILTER,
     STAGE_INFERENCE,
+    STAGE_MAP,
     STAGE_PREPROCESS,
 )
 
@@ -48,6 +61,9 @@ class PipelineRunner:
         idle_sleep_s: How long to sleep when the source returns no frame.
             Small enough to keep responsiveness high, big enough to not
             burn a CPU core doing nothing.
+        watchdog_kick: Optional callback invoked once per successful
+            tick. Sprint 10 uses this to feed
+            :class:`~irisflow.control.safety.Watchdog`.
     """
 
     __slots__ = (
@@ -58,6 +74,7 @@ class PipelineRunner:
         "_last_face_present",
         "_log",
         "_stop",
+        "_watchdog_kick",
     )
 
     def __init__(
@@ -65,6 +82,7 @@ class PipelineRunner:
         components: PipelineComponents,
         *,
         idle_sleep_s: float = _DEFAULT_IDLE_SLEEP_S,
+        watchdog_kick: Callable[[], None] | None = None,
     ) -> None:
         self._components = components
         self._idle_sleep_s = idle_sleep_s
@@ -73,6 +91,7 @@ class PipelineRunner:
         self._last_face_present = False
         self._face_last_seen: float | None = None
         self._face_lost_streak = 0
+        self._watchdog_kick = watchdog_kick
 
     # ------------------------------------------------------------------ API
     @property
@@ -137,7 +156,10 @@ class PipelineRunner:
                     inference_ms=raw.inference_ms,
                 )
             )
+            self._run_downstream(frame_id=frame.frame_id, timestamp=frame.timestamp, raw=raw)
             metrics.increment("frames_ok")
+            if self._watchdog_kick is not None:
+                self._watchdog_kick()
         except Exception as exc:
             self._log.warning(
                 "runner.tick_failed", frame_id=frame.frame_id, error=str(exc)
@@ -145,6 +167,38 @@ class PipelineRunner:
             metrics.increment("frames_dropped")
         finally:
             clear_context()
+
+    # ------------------------------------------------------------------ downstream stages
+    def _run_downstream(
+        self, *, frame_id: int, timestamp: float, raw: RawGaze
+    ) -> None:
+        """Run calibration → mapping → filtering when those are wired."""
+        components = self._components
+        if components.mapper is None or components.filter_chain is None:
+            return
+
+        calibrated: CalibratedGaze
+        if components.calibration_model is not None and components.calibration_model.is_fitted:
+            with components.metrics.time(STAGE_CALIBRATE):
+                calibrated = components.calibration_model.transform(raw)
+        else:
+            calibrated = CalibratedGaze(x=raw.x, y=raw.y, profile_id="raw")
+
+        with components.metrics.time(STAGE_MAP):
+            screen_point = components.mapper.to_screen(calibrated)
+        with components.metrics.time(STAGE_FILTER):
+            smoothed = components.filter_chain.apply(screen_point, timestamp)
+
+        components.bus.publish(
+            GazeUpdated(
+                frame_id=frame_id,
+                timestamp=timestamp,
+                px=smoothed.px,
+                py=smoothed.py,
+                is_fixation=smoothed.is_fixation,
+                confidence=raw.confidence,
+            )
+        )
 
     # ------------------------------------------------------------------ state transitions
     def _handle_face_lost(self, frame_id: int, timestamp: float) -> None:
@@ -179,6 +233,12 @@ class PipelineRunner:
             components.source.close()
         except Exception as exc:
             self._log.warning("runner.source_close_failed", error=str(exc))
+        # Disable the cursor unconditionally on shutdown: the DoD requires
+        # that a crashing / stopping process never leaves the cursor
+        # "hijacked" by gaze control.
+        if components.cursor is not None:
+            with contextlib.suppress(Exception):
+                components.cursor.disable()
         if components.state.state != PipelineState.IDLE:
             with contextlib.suppress(ValueError):
                 components.state.transition_to(PipelineState.IDLE)

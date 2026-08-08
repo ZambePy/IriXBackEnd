@@ -90,6 +90,7 @@ path of the offending field.
 | `safety.kill_switch` | `str` | `ctrl+alt+esc` | Global hotkey (Sprint 10) |
 | `safety.pause_on_face_lost_ms` | `int ≥ 0` | `2000` | Auto-pause threshold |
 | `safety.rest_zone_px` | `(int, int, int, int)` | `(0, 0, 0, 0)` | `x, y, w, h`; `(0,0,0,0)` disables |
+| `safety.watchdog_timeout_ms` | `int ≥ 0` | `500` | Cursor is disabled when no gaze tick lands in this window |
 
 ### `telemetry` — Sprint 11
 | Field | Type | Default | Notes |

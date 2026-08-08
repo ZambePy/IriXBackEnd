@@ -715,11 +715,11 @@ Legenda de esforço: `P` ≈ 2h · `M` ≈ 4h · `G` ≈ 6-8h
 - CLI `irisflow run` completo
 
 **Critérios de conclusão**
-- [ ] Cursor acompanha o olhar de forma utilizável em teste manual
-- [ ] Kill switch libera o mouse em ≤ 100 ms, testado sob carga
-- [ ] Nenhum clique disparado em estado `LOST` ou `PAUSED`
-- [ ] Crash forçado do processo não deixa o mouse "sequestrado"
-- [ ] Toda a suite automatizada roda com `NoOpCursor` — **testes nunca movem o mouse do desenvolvedor**
+- [x] Cursor acompanha o olhar de forma utilizável em teste manual
+- [x] Kill switch libera o mouse em ≤ 100 ms, testado sob carga
+- [x] Nenhum clique disparado em estado `LOST` ou `PAUSED`
+- [x] Crash forçado do processo não deixa o mouse "sequestrado"
+- [x] Toda a suite automatizada roda com `NoOpCursor` — **testes nunca movem o mouse do desenvolvedor**
 
 > Marco: **backend funcional completo em modo standalone.** Da Sprint 11 em diante, o trabalho é de exposição e robustez.
 
@@ -737,10 +737,10 @@ Legenda de esforço: `P` ≈ 2h · `M` ≈ 4h · `G` ≈ 6-8h
 - Fixtures de sessão gravada para os testes E2E
 
 **Critérios de conclusão**
-- [ ] Replay produz saída **idêntica** à execução original (determinismo com `FakeClock`)
-- [ ] Relatório gerado ao fim de cada sessão
-- [ ] Overhead de telemetria ≤ 3% do tempo de frame
-- [ ] Suite E2E roda sobre gravação, sem webcam, em CI
+- [x] Replay produz saída **idêntica** à execução original (determinismo com `FakeClock`)
+- [x] Relatório gerado ao fim de cada sessão
+- [x] Overhead de telemetria ≤ 3% do tempo de frame
+- [x] Suite E2E roda sobre gravação, sem webcam, em CI
 
 ---
 

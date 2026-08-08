@@ -64,6 +64,7 @@ control:
     kill_switch: ctrl+alt+esc
     pause_on_face_lost_ms: 2000
     rest_zone_px: [0, 0, 0, 0]    # x, y, w, h — zero means disabled
+    watchdog_timeout_ms: 500      # disable cursor if pipeline stalls this long
 
 telemetry:
   metrics_enabled: true
