@@ -758,12 +758,12 @@ Legenda de esforço: `P` ≈ 2h · `M` ≈ 4h · `G` ≈ 6-8h
 - CLI `irisflow serve`
 
 **Critérios de conclusão**
-- [ ] Frontend recebe posição a ≥ 20 Hz de forma estável
-- [ ] Cliente lento não degrada o pipeline (mensagens descartadas, medido)
-- [ ] Desconexão abrupta não derruba o pipeline; múltiplos clientes simultâneos suportados
-- [ ] Calibração pode ser conduzida inteiramente pelo WebSocket
-- [ ] **`api/` não contém nenhuma regra de rastreamento** — verificado por `import-linter` e por revisão
-- [ ] Testes com `httpx` + cliente WS de teste do FastAPI
+- [x] Frontend recebe posição a ≥ 20 Hz de forma estável
+- [x] Cliente lento não degrada o pipeline (mensagens descartadas, medido)
+- [x] Desconexão abrupta não derruba o pipeline; múltiplos clientes simultâneos suportados
+- [x] Calibração pode ser conduzida inteiramente pelo WebSocket
+- [x] **`api/` não contém nenhuma regra de rastreamento** — verificado por `import-linter` e por revisão
+- [x] Testes com `httpx` + cliente WS de teste do FastAPI
 
 ---
 

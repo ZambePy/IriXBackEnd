@@ -143,7 +143,8 @@ include_external_packages = true
 name = "Layered architecture"
 type = "layers"
 layers = [
-    "irisflow.cli | irisflow.api",
+    "irisflow.cli",
+    "irisflow.api",
     "irisflow.pipeline",
     "irisflow.preprocessing | irisflow.calibration | irisflow.mapping | irisflow.filtering",
     "irisflow.capture | irisflow.detection | irisflow.inference | irisflow.control",
