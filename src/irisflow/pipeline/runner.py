@@ -44,6 +44,7 @@ from irisflow.pipeline.stages import (
     STAGE_INFERENCE,
     STAGE_MAP,
     STAGE_PREPROCESS,
+    STAGE_TICK_WALL,
 )
 
 __all__ = ["PipelineRunner"]
@@ -68,11 +69,17 @@ class PipelineRunner:
 
     __slots__ = (
         "_components",
+        "_degen_warned",
+        "_degen_window",
+        "_degen_window_start",
         "_face_last_seen",
         "_face_lost_streak",
         "_idle_sleep_s",
         "_last_face_present",
         "_log",
+        "_sat_consec_x",
+        "_sat_consec_y",
+        "_sat_warned",
         "_stop",
         "_watchdog_kick",
     )
@@ -92,6 +99,12 @@ class PipelineRunner:
         self._face_last_seen: float | None = None
         self._face_lost_streak = 0
         self._watchdog_kick = watchdog_kick
+        self._sat_consec_x: int = 0
+        self._sat_consec_y: int = 0
+        self._sat_warned: bool = False
+        self._degen_window: list[tuple[float, float]] = []
+        self._degen_window_start: float = 0.0
+        self._degen_warned: bool = False
 
     # ------------------------------------------------------------------ API
     @property
@@ -125,46 +138,49 @@ class PipelineRunner:
     def _tick(self) -> None:
         components = self._components
         metrics = components.metrics
-        with metrics.time(STAGE_CAPTURE):
-            frame = components.source.read()
-        if frame is None:
-            components.clock.sleep(self._idle_sleep_s)
-            return
-
-        bind(frame_id=frame.frame_id)
-        try:
-            with metrics.time(STAGE_DETECTION):
-                detection = components.detector.detect(frame)
-            if detection is None:
-                self._handle_face_lost(frame.frame_id, frame.timestamp)
-                metrics.increment("frames_face_lost")
+        with metrics.time(STAGE_TICK_WALL):
+            with metrics.time(STAGE_CAPTURE):
+                frame = components.source.read()
+            if frame is None:
+                components.clock.sleep(self._idle_sleep_s)
                 return
-            self._handle_face_acquired(frame.frame_id, frame.timestamp)
 
-            with metrics.time(STAGE_PREPROCESS):
-                model_input = components.preprocessor.build(frame, detection)
-            with metrics.time(STAGE_INFERENCE):
-                raw = components.estimator.predict(model_input)
+            bind(frame_id=frame.frame_id)
+            try:
+                with metrics.time(STAGE_DETECTION):
+                    detection = components.detector.detect(frame)
+                if detection is None:
+                    self._handle_face_lost(frame.frame_id, frame.timestamp)
+                    metrics.increment("frames_face_lost")
+                    return
+                self._handle_face_acquired(frame.frame_id, frame.timestamp)
 
-            components.bus.publish(
-                RawGazeReady(
-                    frame_id=frame.frame_id,
-                    timestamp=frame.timestamp,
-                    x=raw.x,
-                    y=raw.y,
-                    confidence=raw.confidence,
-                    inference_ms=raw.inference_ms,
+                with metrics.time(STAGE_PREPROCESS):
+                    model_input = components.preprocessor.build(frame, detection)
+                with metrics.time(STAGE_INFERENCE):
+                    raw = components.estimator.predict(model_input)
+
+                self._check_gaze_health(raw.x, raw.y, frame.timestamp)
+
+                components.bus.publish(
+                    RawGazeReady(
+                        frame_id=frame.frame_id,
+                        timestamp=frame.timestamp,
+                        x=raw.x,
+                        y=raw.y,
+                        confidence=raw.confidence,
+                        inference_ms=raw.inference_ms,
+                    )
                 )
-            )
-            self._run_downstream(frame_id=frame.frame_id, timestamp=frame.timestamp, raw=raw)
-            metrics.increment("frames_ok")
-            if self._watchdog_kick is not None:
-                self._watchdog_kick()
-        except Exception as exc:
-            self._log.warning("runner.tick_failed", frame_id=frame.frame_id, error=str(exc))
-            metrics.increment("frames_dropped")
-        finally:
-            clear_context()
+                self._run_downstream(frame_id=frame.frame_id, timestamp=frame.timestamp, raw=raw)
+                metrics.increment("frames_ok")
+                if self._watchdog_kick is not None:
+                    self._watchdog_kick()
+            except Exception as exc:
+                self._log.warning("runner.tick_failed", frame_id=frame.frame_id, error=str(exc))
+                metrics.increment("frames_dropped")
+            finally:
+                clear_context()
 
     # ------------------------------------------------------------------ downstream stages
     def _run_downstream(self, *, frame_id: int, timestamp: float, raw: RawGaze) -> None:
@@ -195,6 +211,72 @@ class PipelineRunner:
                 confidence=raw.confidence,
             )
         )
+
+    # ------------------------------------------------------------------ diagnostics
+    _SAT_WARN_FRAMES = 30
+    _DEGEN_WINDOW_S = 5.0
+    _DEGEN_AMPLITUDE_THRESHOLD = 0.05
+
+    def _check_gaze_health(self, x: float, y: float, timestamp: float) -> None:
+        """Warn when raw gaze is pathologically saturated or degenerate."""
+        # Saturation: exactly 0.0 or 1.0 (sigmoid boundary) for N frames
+        if x in (0.0, 1.0):
+            self._sat_consec_x += 1
+        else:
+            self._sat_consec_x = 0
+        if y in (0.0, 1.0):
+            self._sat_consec_y += 1
+        else:
+            self._sat_consec_y = 0
+        if (
+            not self._sat_warned
+            and max(self._sat_consec_x, self._sat_consec_y) >= self._SAT_WARN_FRAMES
+        ):
+            self._sat_warned = True
+            self._log.warning(
+                "gaze.saturated",
+                consec_x=self._sat_consec_x,
+                consec_y=self._sat_consec_y,
+                message=(
+                    "raw_x or raw_y stuck at 0.0/1.0 for "
+                    f"{self._SAT_WARN_FRAMES}+ frames — "
+                    "likely preprocessing mismatch (wrong channel order or normalization)."
+                ),
+            )
+        elif max(self._sat_consec_x, self._sat_consec_y) < self._SAT_WARN_FRAMES:
+            self._sat_warned = False
+
+        # Degeneracy: very low amplitude over a 5-second sliding window
+        if not self._degen_window:
+            self._degen_window_start = timestamp
+        self._degen_window.append((x, y))
+        window_age = timestamp - self._degen_window_start
+        if window_age >= self._DEGEN_WINDOW_S:
+            xs = [p[0] for p in self._degen_window]
+            ys = [p[1] for p in self._degen_window]
+            amp_x = max(xs) - min(xs)
+            amp_y = max(ys) - min(ys)
+            if (
+                not self._degen_warned
+                and max(amp_x, amp_y) < self._DEGEN_AMPLITUDE_THRESHOLD
+            ):
+                self._degen_warned = True
+                self._log.warning(
+                    "gaze.degenerate",
+                    amp_x=round(amp_x, 4),
+                    amp_y=round(amp_y, 4),
+                    window_s=round(window_age, 1),
+                    message=(
+                        f"gaze amplitude ({amp_x:.4f}/{amp_y:.4f}) below "
+                        f"{self._DEGEN_AMPLITUDE_THRESHOLD} over "
+                        f"{window_age:.1f}s — model may not be responding to eye movement."
+                    ),
+                )
+            elif max(amp_x, amp_y) >= self._DEGEN_AMPLITUDE_THRESHOLD:
+                self._degen_warned = False
+            # Slide: drop samples older than the window
+            self._degen_window = self._degen_window[-50:]
+            self._degen_window_start = timestamp - self._DEGEN_WINDOW_S * 0.5
 
     # ------------------------------------------------------------------ state transitions
     def _handle_face_lost(self, frame_id: int, timestamp: float) -> None:

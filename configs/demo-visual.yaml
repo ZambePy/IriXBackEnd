@@ -1,0 +1,15 @@
+# Demo config — visual only, no cursor control.
+# Inherit all defaults from default.yaml; only override what differs.
+
+control:
+  enabled: false
+  rate_limit_hz: 60
+  dwell:
+    radius_px: 40
+    duration_ms: 800
+    refractory_ms: 400
+  safety:
+    kill_switch: ctrl+alt+esc
+    pause_on_face_lost_ms: 2000
+    rest_zone_px: [0, 0, 0, 0]
+    watchdog_timeout_ms: 500

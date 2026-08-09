@@ -169,15 +169,26 @@ class AppState:
     runner_thread: threading.Thread | None = None
     calibration: CalibrationCoordinator | None = None
     _stop_lock: threading.Lock = field(default_factory=threading.Lock, init=False)
+    _pipeline_ready: threading.Event = field(default_factory=threading.Event, init=False)
 
     # ------------------------------------------------------------------ lifecycle
     def start(self) -> None:
         """Bring up the pipeline in a background thread."""
         self.hub.start()
         self.control_sink.start()
+        self.components.bus.subscribe(RawGazeReady, self._on_first_sample)
         thread = threading.Thread(target=self._run_pipeline, name="irisflow-pipeline", daemon=True)
         self.runner_thread = thread
         thread.start()
+
+    def _on_first_sample(self, event: Event) -> None:
+        if isinstance(event, RawGazeReady):
+            self._pipeline_ready.set()
+            self.components.bus.unsubscribe(RawGazeReady, self._on_first_sample)
+
+    def wait_for_pipeline_ready(self, timeout_s: float = 10.0) -> bool:
+        """Block until the pipeline has produced its first gaze sample."""
+        return self._pipeline_ready.wait(timeout=timeout_s)
 
     def _run_pipeline(self) -> None:
         with contextlib.suppress(Exception):  # pragma: no cover — defensive net

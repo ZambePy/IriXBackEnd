@@ -39,6 +39,7 @@ __all__ = [
     "GazeMessage",
     "HealthResponse",
     "PauseMessage",
+    "PipelineReadyMessage",
     "ProfileInfo",
     "ProfileListResponse",
     "ResumeMessage",
@@ -192,6 +193,11 @@ class SafetyMessage(_WireBase):
     reason: str | None = None
 
 
+class PipelineReadyMessage(_WireBase):
+    type: Literal["pipeline_ready"] = "pipeline_ready"
+    ts: float
+
+
 class ErrorMessage(_WireBase):
     type: Literal["error"] = "error"
     code: str
@@ -207,6 +213,7 @@ ServerMessage = Annotated[
     | CalibrationPointMessage
     | CalibrationResultMessage
     | SafetyMessage
+    | PipelineReadyMessage
     | ErrorMessage,
     Field(discriminator="type"),
 ]

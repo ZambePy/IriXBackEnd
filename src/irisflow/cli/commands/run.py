@@ -102,9 +102,9 @@ def run(
         typer.Option(
             "--metrics-every",
             min=1,
-            help="Print a metrics summary every N delivered gaze frames.",
+            help="Print a metrics summary every N seconds.",
         ),
-    ] = 30,
+    ] = 10,
     quiet_gaze: Annotated[
         bool,
         typer.Option(
@@ -289,21 +289,26 @@ def _wire_console_sinks(
     quiet_gaze: bool,
     cursor_enabled: bool,
 ) -> None:
-    counter = {"n": 0}
     lock = threading.Lock()
+    import time as _time
+    _last_metrics_ts = {"t": _time.monotonic()}
 
     def _on_raw(event: object) -> None:
         if not isinstance(event, RawGazeReady):
             return
-        with lock:
-            counter["n"] += 1
-            n = counter["n"]
         if not quiet_gaze:
             typer.echo(
                 f"raw x={event.x:.3f} y={event.y:.3f} "
                 f"conf={event.confidence:.2f} inf_ms={event.inference_ms:.1f}"
             )
-        if n % metrics_every == 0:
+        now = _time.monotonic()
+        with lock:
+            if now - _last_metrics_ts["t"] >= metrics_every:
+                _last_metrics_ts["t"] = now
+                should_print = True
+            else:
+                should_print = False
+        if should_print:
             _print_snapshot(components)
 
     def _on_gaze(event: object) -> None:
@@ -359,6 +364,10 @@ def _print_snapshot(components: PipelineComponents) -> None:
             f"p50={stats.p50_ms:>6.2f}ms p95={stats.p95_ms:>6.2f}ms "
             f"max={stats.max_ms:>6.2f}ms"
         )
+    # If the source tracks dropped frames, show it.
+    source = components.source
+    if hasattr(source, "dropped_count"):
+        typer.echo(f"  capture_dropped (queue): {source.dropped_count}")
 
 
 def _print_final_snapshot(components: PipelineComponents) -> None:

@@ -19,6 +19,7 @@ __all__ = [
     "STAGE_INFERENCE",
     "STAGE_MAP",
     "STAGE_PREPROCESS",
+    "STAGE_TICK_WALL",
 ]
 
 STAGE_CAPTURE: Final[str] = "capture"
@@ -29,3 +30,4 @@ STAGE_CALIBRATE: Final[str] = "calibrate"
 STAGE_MAP: Final[str] = "map"
 STAGE_FILTER: Final[str] = "filter"
 STAGE_CONTROL: Final[str] = "control"
+STAGE_TICK_WALL: Final[str] = "tick_wall"

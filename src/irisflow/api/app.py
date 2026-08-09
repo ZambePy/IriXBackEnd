@@ -67,6 +67,11 @@ def create_app(
             builder = state_factory if state_factory is not None else build_app_state_from_config
             resolved = builder(cfg)
         resolved.start()
+        # Wait (non-blocking on the event loop) for the camera to deliver its
+        # first frame before declaring the server ready.
+        import asyncio as _asyncio
+        loop = _asyncio.get_running_loop()
+        await loop.run_in_executor(None, lambda: resolved.wait_for_pipeline_ready(timeout_s=15.0))
         app.state.irisflow = resolved
         try:
             yield

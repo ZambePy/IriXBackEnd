@@ -124,3 +124,53 @@ cliques acidentais.
 
 **Verdade no código:** `src/irisflow/control/dwell.py`,
 `src/irisflow/pipeline/control_sink.py`.
+
+---
+
+## D7 — Configuração de pré-processamento vencedora (janela demo 2026-08)
+
+**Decisão:** _(a preencher após T6 rodar com rosto real)._ Placeholder
+até a varredura de `scripts/config_sweep.py` produzir a tabela e a
+combinação vencedora ser aplicada em `configs/default.yaml`.
+
+**Motivação prevista:** o eixo Y ficou constante em `raw_y = 0.0` na
+tentativa anterior, apesar da avaliação offline registrar
+`per_axis_mae_cm: {x: 2.40, y: 2.07}`. A hipótese em `tarefas.md §T6`
+é divergência de pré-processamento — não do modelo. A decisão será
+tomada por medição, não por palpite.
+
+**Verdade no código (após medir):** `configs/default.yaml`,
+`src/irisflow/preprocessing/normalize.py`. Se `swap_eye_inputs` for
+adicionado, também `src/irisflow/preprocessing/builder.py` e
+`src/irisflow/config/schema.py::ModelConfig`.
+
+**Fonte:** tabela T6 em `docs/ACHADOS.md`.
+
+---
+
+## D8 — Propriedade do dwell na janela demo 2026-08
+
+**Decisão (temporária):** o **backend move o cursor**, o **frontend
+detém o dwell** via `DwellButton`. Efetivada em `configs/demo-control.yaml`
+com `control.dwell.duration_ms: 999999` (≈ 16 min) — o `DwellClicker`
+do backend nunca dispara dentro do tempo humano, e o `DwellButton`
+do React fica como único disparador de seleção.
+
+**Motivação:** `DwellButton` usa `onMouseEnter`/`onMouseLeave`, que só
+respondem ao cursor real do SO — o ponto de gaze desenhado tem
+`pointer-events: none`. Se o backend também disparar dwell, haveria
+clique duplo. Deixar o dwell no frontend permite reaproveitar a UX
+existente (anel de progresso, feedback visual por componente).
+
+**Alternativa considerada:** adicionar `control.dwell.enabled: bool` ao
+schema. Rejeitada: `duration_ms=999999` já passa `Field(gt=0)` sem
+alterar API/schema — mais reversível.
+
+**Escopo:** só a janela desta demo. Pós-demo, migrar para dwell
+autoritativo no backend com eventos `dwell_progress`/`click` no WS
+já expostos pelo `SessionHub`, e remover o `DwellButton` (ou fazer
+com que ele escute os eventos ao invés de acionar `mouseenter`).
+
+**Verdade no código:** `configs/demo-control.yaml`,
+`frontend/src/components/DwellButton.tsx`,
+`src/irisflow/pipeline/control_sink.py`.

@@ -148,23 +148,29 @@ def calibrate(
 class _LatestSampleSink:
     """Thread-safe holder for the most recent :class:`RawGazeReady`."""
 
-    __slots__ = ("_event", "_lock")
+    __slots__ = ("_data", "_lock", "_ready")
 
     def __init__(self) -> None:
-        self._event: RawGazeReady | None = None
+        self._data: RawGazeReady | None = None
         self._lock = threading.Lock()
+        self._ready = threading.Event()
 
     def on_event(self, event: object) -> None:
         if not isinstance(event, RawGazeReady):
             return
         with self._lock:
-            self._event = event
+            self._data = event
+        self._ready.set()
 
     def pop(self) -> RawGazeReady | None:
         with self._lock:
-            event = self._event
-            self._event = None
+            event = self._data
+            self._data = None
         return event
+
+    def wait_for_first_sample(self, timeout_s: float) -> bool:
+        """Block until the first raw gaze sample is received."""
+        return self._ready.wait(timeout=timeout_s)
 
 
 def _drive_targets(
@@ -174,6 +180,11 @@ def _drive_targets(
     prompt_seconds: float,
 ) -> None:
     """Iterate through every target, feeding samples until each completes."""
+    if not latest_sample.wait_for_first_sample(timeout_s=5.0):
+        typer.echo(
+            "[calibrate] warning: no gaze samples in first 5 s — "
+            "camera may still be warming up."
+        )
     for target in session.targets:
         session.begin_target(target.index)
         deadline = time.monotonic() + prompt_seconds

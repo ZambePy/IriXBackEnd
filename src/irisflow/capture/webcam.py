@@ -65,6 +65,8 @@ class WebcamSource(BaseFrameSource):
         "_cap_lock",
         "_capture_factory",
         "_device_id",
+        "_dropped_count",
+        "_first_frame_event",
         "_fps",
         "_height",
         "_last_error",
@@ -111,6 +113,8 @@ class WebcamSource(BaseFrameSource):
         self._thread: threading.Thread | None = None
         self._reconnect_count = 0
         self._last_error: str | None = None
+        self._dropped_count: int = 0
+        self._first_frame_event: threading.Event = threading.Event()
         self._log = get_logger("irisflow.capture.webcam")
 
     # ---------------------------------------------------------------- lifecycle
@@ -159,6 +163,19 @@ class WebcamSource(BaseFrameSource):
     def last_error(self) -> str | None:
         """Human-readable last error from the capture thread, or ``None``."""
         return self._last_error
+
+    @property
+    def dropped_count(self) -> int:
+        """Frames discarded by the capture queue (pipeline too slow)."""
+        return self._dropped_count
+
+    def wait_for_first_frame(self, timeout_s: float = 5.0) -> bool:
+        """Block until the capture thread delivers its first frame.
+
+        Returns True if a frame arrived within ``timeout_s``, False on timeout.
+        Safe to call before or after :meth:`open`.
+        """
+        return self._first_frame_event.wait(timeout=timeout_s)
 
     # ---------------------------------------------------------------- thread body
     def _run(self) -> None:
@@ -232,18 +249,18 @@ class WebcamSource(BaseFrameSource):
         )
 
     def _publish(self, frame: Frame) -> None:
-        # Drop-oldest: if the slot is full, discard the stale frame and put the
-        # newest one in its place. Latency > completeness (SPRINTS.md §2.2).
         try:
             self._queue.put_nowait(frame)
+            self._first_frame_event.set()
             return
         except queue.Full:
             pass
         with contextlib.suppress(queue.Empty):
             self._queue.get_nowait()
-        # Somebody may have consumed just now — swallow and let the next tick win.
+        self._dropped_count += 1
         with contextlib.suppress(queue.Full):
             self._queue.put_nowait(frame)
+        self._first_frame_event.set()
 
     def _release_locked(self) -> None:
         self._reconnect_count += 1

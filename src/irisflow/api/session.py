@@ -32,6 +32,7 @@ from irisflow.api.schemas import (
     ErrorMessage,
     FaceLostMessage,
     GazeMessage,
+    PipelineReadyMessage,
     SafetyMessage,
     ServerMessage,
     StateMessage,
@@ -43,6 +44,7 @@ from irisflow.core.events import (
     Event,
     FaceLost,
     GazeUpdated,
+    RawGazeReady,
     SafetyPaused,
     SafetyResumed,
     StateChanged,
@@ -216,6 +218,7 @@ class SessionHub:
     __slots__ = (
         "_bus",
         "_lock",
+        "_ready_sent",
         "_screen_height",
         "_screen_width",
         "_sessions",
@@ -235,6 +238,7 @@ class SessionHub:
         self._sessions: list[ClientSession] = []
         self._lock = threading.Lock()
         self._started = False
+        self._ready_sent: bool = False
 
     # ------------------------------------------------------------------ lifecycle
     def start(self) -> None:
@@ -273,6 +277,15 @@ class SessionHub:
     # ------------------------------------------------------------------ dispatch
     def _on_event(self, event: Event) -> None:
         """Bus callback — runs on the pipeline thread."""
+        import time as _time
+        if not self._ready_sent and isinstance(event, RawGazeReady):
+            self._ready_sent = True
+            ready_msg = PipelineReadyMessage(ts=_time.monotonic())
+            with self._lock:
+                targets = list(self._sessions)
+            for session in targets:
+                self._dispatch_message(session, ready_msg)
+
         message = translate_event(
             event,
             screen_width=self._screen_width,

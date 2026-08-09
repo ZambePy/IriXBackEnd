@@ -1,0 +1,16 @@
+# Demo config — cursor control enabled, backend dwell effectively disabled
+# (duration_ms=999999) so only the frontend DwellButton fires clicks.
+# T14 decision: backend moves cursor; frontend handles dwell selection.
+
+control:
+  enabled: true
+  rate_limit_hz: 60
+  dwell:
+    radius_px: 40
+    duration_ms: 999999
+    refractory_ms: 400
+  safety:
+    kill_switch: ctrl+alt+esc
+    pause_on_face_lost_ms: 2000
+    rest_zone_px: [0, 0, 0, 0]
+    watchdog_timeout_ms: 500

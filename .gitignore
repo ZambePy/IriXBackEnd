@@ -47,6 +47,7 @@ models/*.keras
 models/*.onnx
 models/*.h5
 models/*.pb
+models/*.task
 models/checkpoint_state.json
 models/training_log.csv
 !models/.gitkeep
