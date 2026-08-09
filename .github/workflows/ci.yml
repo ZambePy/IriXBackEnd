@@ -25,8 +25,8 @@ jobs:
       - name: Set up Python 3.11
         run: uv python install 3.11
 
-      - name: Install project (dev extras)
-        run: uv sync --extra dev
+      - name: Install project (dev + api extras)
+        run: uv sync --extra dev --extra api
 
       - name: Ruff (lint + format check)
         run: |
