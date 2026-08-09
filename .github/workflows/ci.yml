@@ -41,5 +41,5 @@ jobs:
 
       - name: Pytest
         env:
-          COLUMNS: "200"
+          TERMINAL_WIDTH: "200"
         run: uv run pytest --cov=irisflow --cov-report=term-missing
