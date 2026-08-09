@@ -40,6 +40,4 @@ jobs:
         run: uv run lint-imports
 
       - name: Pytest
-        env:
-          TERMINAL_WIDTH: "200"
         run: uv run pytest --cov=irisflow --cov-report=term-missing
