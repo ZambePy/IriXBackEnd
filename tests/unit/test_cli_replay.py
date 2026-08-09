@@ -23,9 +23,10 @@ def test_replay_appears_in_help() -> None:
 def test_replay_help_lists_flags() -> None:
     result = runner.invoke(app, ["replay", "--help"])
     assert result.exit_code == 0
-    assert "--strict" in result.stdout
-    assert "--report-only" in result.stdout
-    assert "--config" in result.stdout
+    out = result.flat_stdout
+    assert "--strict" in out
+    assert "--report-only" in out
+    assert "--config" in out
 
 
 def test_report_only_over_fixture_prints_report() -> None:

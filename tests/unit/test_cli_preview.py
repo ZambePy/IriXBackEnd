@@ -25,7 +25,7 @@ def test_preview_is_listed_in_help() -> None:
 def test_preview_help_renders_options() -> None:
     result = runner.invoke(app, ["preview", "--help"])
     assert result.exit_code == 0
-    assert "--config" in result.stdout
+    assert "--config" in result.flat_stdout
 
 
 def test_preview_exits_gracefully_when_model_missing(tmp_path: Path) -> None:

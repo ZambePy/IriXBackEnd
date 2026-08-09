@@ -17,8 +17,9 @@ runner = CliRunner()
 def test_calibrate_help_lists_profile_option() -> None:
     result = runner.invoke(app, ["calibrate", "--help"])
     assert result.exit_code == 0
-    assert "--profile" in result.stdout
-    assert "--screen-width" in result.stdout
+    out = result.flat_stdout
+    assert "--profile" in out
+    assert "--screen-width" in out
 
 
 def test_calibrate_requires_profile() -> None:

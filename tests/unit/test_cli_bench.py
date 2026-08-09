@@ -25,10 +25,11 @@ def test_bench_requires_at_least_one_mode() -> None:
 def test_bench_help_lists_modes() -> None:
     result = runner.invoke(app, ["bench", "--help"])
     assert result.exit_code == 0
-    assert "--latency" in result.stdout
-    assert "--compare-backends" in result.stdout
-    assert "--sanity-check" in result.stdout
-    assert "--filters" in result.stdout
+    out = result.flat_stdout
+    assert "--latency" in out
+    assert "--compare-backends" in out
+    assert "--sanity-check" in out
+    assert "--filters" in out
 
 
 def test_bench_filters_runs_end_to_end() -> None:
