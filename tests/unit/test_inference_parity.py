@@ -89,6 +89,7 @@ def test_compare_keras_embedding_vs_onnx_smoke_missing_files(tmp_path: Path) -> 
     covered separately by @pytest.mark.model integration tests once the
     artifacts are present.
     """
+    pytest.importorskip("keras")
     from irisflow.core.exceptions import InferenceError
     from irisflow.inference.parity import compare_keras_embedding_vs_onnx
 

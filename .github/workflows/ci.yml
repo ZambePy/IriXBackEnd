@@ -25,8 +25,8 @@ jobs:
       - name: Set up Python 3.11
         run: uv python install 3.11
 
-      - name: Install project (dev + api extras)
-        run: uv sync --extra dev --extra api
+      - name: Install project (dev + api + inference-onnx extras)
+        run: uv sync --extra dev --extra api --extra inference-onnx
 
       - name: Ruff (lint + format check)
         run: |
@@ -40,4 +40,6 @@ jobs:
         run: uv run lint-imports
 
       - name: Pytest
+        env:
+          COLUMNS: "200"
         run: uv run pytest --cov=irisflow --cov-report=term-missing
